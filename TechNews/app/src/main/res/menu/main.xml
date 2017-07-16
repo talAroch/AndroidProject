@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/add_btn"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Add Article"
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/edit_btn"
+        android:icon="@android:drawable/ic_menu_login"
+        android:title="Disconnect"
+        android:showAsAction="ifRoom"/>
+</menu>
