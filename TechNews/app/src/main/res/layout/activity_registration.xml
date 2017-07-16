@@ -28,6 +28,7 @@
         android:layout_gravity="center"
         android:hint="Email"
         android:layout_marginBottom="20dp"
+        android:inputType="textEmailAddress"
         />
 
     <EditText
@@ -37,6 +38,7 @@
         android:layout_gravity="center"
         android:hint="Password"
         android:layout_marginBottom="20dp"
+        android:inputType="textPassword"
         />
 
     <EditText
@@ -46,6 +48,7 @@
         android:layout_gravity="center"
         android:hint="verify password"
         android:layout_marginBottom="20dp"
+        android:inputType="textPassword"
         />
 
     <Button
