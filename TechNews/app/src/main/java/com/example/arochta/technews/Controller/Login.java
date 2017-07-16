@@ -54,6 +54,8 @@ public class Login extends AppCompatActivity {
                 //email.getText();
                 //password.getText();
             }
+
+            //TODO:move to main activity
         });
     }
 
