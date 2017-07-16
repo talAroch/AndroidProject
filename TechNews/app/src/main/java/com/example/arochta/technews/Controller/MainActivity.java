@@ -1,8 +1,10 @@
-package com.example.arochta.technews;
+package com.example.arochta.technews.Controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.arochta.technews.R;
 
 public class MainActivity extends AppCompatActivity {
 
