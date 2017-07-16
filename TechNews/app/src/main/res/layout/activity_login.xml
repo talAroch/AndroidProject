@@ -47,4 +47,16 @@
         android:id="@+id/loginBtn"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="don't have an account yet?\nclick here now!"
+        android:textColor="#006666"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:linksClickable="true"
+        android:id="@+id/registerLink"
+        />
+
 </LinearLayout>

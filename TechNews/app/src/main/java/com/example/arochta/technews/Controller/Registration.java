@@ -1,5 +1,6 @@
 package com.example.arochta.technews.Controller;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -25,5 +26,13 @@ public class Registration extends AppCompatActivity {
         password = (EditText)findViewById(R.id.registerPassword);
         verifypass = (EditText)findViewById(R.id.registerVerifypass);
         register = (Button) findViewById(R.id.registerBtn);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }
