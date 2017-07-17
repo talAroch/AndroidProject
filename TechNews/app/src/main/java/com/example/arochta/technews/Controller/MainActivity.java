@@ -15,28 +15,31 @@ import android.view.MenuItem;
 
 import com.example.arochta.technews.R;
 
-public class MainActivity extends Activity implements NewArticleFragment.OnFragmentInteractionListener, ArticlesListFragment.OnFragmentInteractionListener{
 
-    NewArticleFragment newStudentFragment;
-    ArticlesListFragment studentListFragment;
+public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener{
+
+    ArticlesListFragment articleListFragment;
 
     static String currentID = "";
 
     private Menu our_menu;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try{
         getActionBar().setDisplayHomeAsUpEnabled(false);
+        }catch (NullPointerException e){
+            Log.d("tag","null pointer exeption");
+        }
         FragmentManager fm = getFragmentManager();
 
-        studentListFragment = new ArticlesListFragment();
+        articleListFragment = new ArticlesListFragment();
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container, studentListFragment);
+        fragmentTransaction.add(R.id.main_fragment_container, articleListFragment);
         fragmentTransaction.commit();
     }
 
@@ -49,7 +52,8 @@ public class MainActivity extends Activity implements NewArticleFragment.OnFragm
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.getItem(1).setVisible(false);
+        menu.getItem(0).setVisible(true);
+        menu.getItem(1).setVisible(true);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -57,102 +61,38 @@ public class MainActivity extends Activity implements NewArticleFragment.OnFragm
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.add_btn:
-                newStudentFragment = new NewArticleFragment();
+                /*newStudentFragment = new NewStudentFragment();
                 our_menu.getItem(0).setVisible(false);
                 our_menu.getItem(1).setVisible(false);
                 fragmentTransaction.replace(R.id.main_fragment_container, newStudentFragment);
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
                 break;
-            /*case R.id.edit_btn://CHANGE TO DISCONNECT
-                our_menu.getItem(0).setVisible(false);
+            case R.id.disconnect_btn:
+                /*our_menu.getItem(0).setVisible(false);
                 our_menu.getItem(1).setVisible(false);
                 studentEditFragment = StudentEditFragment.newInstance(currentID);
                 fragmentTransaction.replace(R.id.main_fragment_container, studentEditFragment);
-                fragmentTransaction.commit();
-                break;*/
+                fragmentTransaction.commit();*/
+                break;
 
         }
         return true;
     }
 
-    @Override
-    public void onFragmentInteractionNewSt(String str) {
-        our_menu.getItem(0).setVisible(true);
-        our_menu.getItem(1).setVisible(false);
 
-        if(str.compareTo("save") == 0){
-            studentListFragment = new ArticlesListFragment();////////////////////////////////////////////////////
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container, studentListFragment);
-            fragmentTransaction.commit();
-
-        }
-        else if(str.compareTo("cancel") == 0){
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container, studentListFragment);
-            fragmentTransaction.commit();
-        }
-    }
 
     @Override
     public void onFragmentInteractionList(String str) {
-        currentID = str;
-        our_menu.getItem(0).setVisible(false);
-        our_menu.getItem(1).setVisible(true);
-        //TODO:create article details
-        //studentDetailsFragment = StudentDetailsFragment.newInstance(str);
-        //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        //fragmentTransaction.replace(R.id.main_fragment_container, studentDetailsFragment);
-        //fragmentTransaction.commit();
-    }
 
-    /*@Override
-    public void onFragmentInteractionDetails(String str) {
-        our_menu.getItem(0).setVisible(false);
-        our_menu.getItem(1).setVisible(false);
-        studentEditFragment = StudentEditFragment.newInstance(str);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, studentEditFragment);
-        fragmentTransaction.commit();
     }
-
-    @Override
-    public void onFragmentInteractionEdit(String str,String id) {
-        if(str.compareTo("save") == 0){
-            our_menu.getItem(0).setVisible(false);
-            our_menu.getItem(1).setVisible(true);
-            studentDetailsFragment = StudentDetailsFragment.newInstance(id);;////////////////////////////////////////////////////
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container, studentDetailsFragment);
-            fragmentTransaction.commit();
-        }
-        else if(str.compareTo("delete") == 0){
-            our_menu.getItem(0).setVisible(true);
-            our_menu.getItem(1).setVisible(false);
-            studentListFragment = new StudentListFragment();////////////////////////////////////////////////////
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container, studentListFragment);
-            fragmentTransaction.commit();
-        }
-        else if(str.compareTo("cancel") == 0){
-            our_menu.getItem(0).setVisible(false);
-            our_menu.getItem(1).setVisible(true);
-            studentDetailsFragment = StudentDetailsFragment.newInstance(id);;////////////////////////////////////////////////////
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container, studentDetailsFragment);
-            fragmentTransaction.commit();
-        }
-    }*/
 
     @Override
     public void onBackPressed()
-    {
-        //super.onBackPressed();
+    {//super.onBackPressed();
         our_menu.getItem(0).setVisible(true);
         our_menu.getItem(1).setVisible(false);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, studentListFragment);
+        fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
         fragmentTransaction.commit();
     }
 }
-

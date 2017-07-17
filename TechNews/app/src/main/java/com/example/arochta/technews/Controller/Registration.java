@@ -1,14 +1,15 @@
 package com.example.arochta.technews.Controller;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.arochta.technews.Model.User;
+import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.R;
 
 public class Registration extends AppCompatActivity {
@@ -42,9 +43,12 @@ public class Registration extends AppCompatActivity {
                 else if(isFieldEmpty(password))
                     registerToast("you have to put password");
                 else if(verifyPassword()) {
-                    //TODO: send to model
-                    //email.getText();
-                    //password.getText();
+                    User user = new User(email.getText().toString(),password.getText().toString());
+                    Model.instace.addUser(user);
+                    registerToast("registration was successfull");
+                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else{
                     registerToast("passwords don't match");

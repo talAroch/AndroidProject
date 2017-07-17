@@ -1,5 +1,6 @@
 package com.example.arochta.technews.Controller;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,9 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.arochta.technews.Controller.MainActivity;
+
+import com.example.arochta.technews.Model.Model;
+import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
 
-public class Login extends AppCompatActivity {
+public class Login extends Activity {
 
     EditText email;
     EditText password;
@@ -41,6 +46,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(v.getContext(), Registration.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -50,12 +56,18 @@ public class Login extends AppCompatActivity {
                     registerToast("you have to put email");
                 else if(isFieldEmpty(password))
                     registerToast("you have to put password");
-                //TODO: send to model
-                //email.getText();
-                //password.getText();
-            }
+                else {
+                    if(Model.instace.isUserInSystem(email.getText().toString(),password.getText().toString())){
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        registerToast("wrong email or password");
+                    }
 
-            //TODO:move to main activity
+                }
+            }
         });
     }
 

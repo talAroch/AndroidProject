@@ -14,8 +14,10 @@ public class Article {
     private String title;
     private String author;//CHANGE TO USER
     private Date date;
-    private Image img;
+    private String imgURI;
     private String content;
+
+    public Article(){}
 
     public int getArticleID() {
         return articleID;
@@ -49,12 +51,12 @@ public class Article {
         this.date = date;
     }
 
-    public Image getImg() {
-        return img;
+    public String getImg() {
+        return imgURI;
     }
 
-    public void setImg(Image img) {
-        this.img = img;
+    public void setImg(String img) {
+        this.imgURI = img;
     }
 
     public String getContent() {

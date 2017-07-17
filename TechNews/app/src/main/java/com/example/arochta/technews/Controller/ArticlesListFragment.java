@@ -1,6 +1,7 @@
 package com.example.arochta.technews.Controller;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.R;
+
+import com.example.arochta.technews.Model.Model;
 
 import java.util.List;
 /**
@@ -43,7 +47,7 @@ public class ArticlesListFragment extends Fragment{
         if (getArguments() != null) {
         }
         //TODO:get from DB
-        //data; = Model.instace.getAllStudents();
+        data = Model.instace.getAllArticles();
     }
 
     @Override
@@ -125,12 +129,14 @@ public class ArticlesListFragment extends Fragment{
                 convertView = inflater.inflate(R.layout.article_list_row,null);
             }
 
-            TextView name = (TextView) convertView.findViewById(R.id.article_row_name);
-            TextView id = (TextView) convertView.findViewById(R.id.article_row_id);
-            //change to article
-            //st = data.get(position);
-            //name.setText(st.name);
-            //id.setText(st.id);
+            TextView title = (TextView) convertView.findViewById(R.id.article_row_name);
+            TextView author = (TextView) convertView.findViewById(R.id.article_row_author);
+            ImageView imageview = (ImageView)convertView.findViewById(R.id.article_row_image);
+
+            Article article = data.get(position);
+            title.setText(article.getTitle());
+            author.setText(article.getAuthor());
+            //imageview.setImageDrawable(res);
 
             return convertView;
         }
