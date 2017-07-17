@@ -16,10 +16,11 @@ import android.view.MenuItem;
 import com.example.arochta.technews.R;
 
 
-public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener{
+public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener{
 
     ArticlesListFragment articleListFragment;
     ArticleShowFragment articleShowFragment;
+    NewArticleFragment newArticleFragment;
 
     static int currentID = 0;
 
@@ -62,11 +63,11 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.add_btn:
-                /*newStudentFragment = new NewStudentFragment();
+                newArticleFragment = new NewArticleFragment();
                 our_menu.getItem(0).setVisible(false);
                 our_menu.getItem(1).setVisible(false);
-                fragmentTransaction.replace(R.id.main_fragment_container, newStudentFragment);
-                fragmentTransaction.commit();*/
+                fragmentTransaction.replace(R.id.main_fragment_container, newArticleFragment);
+                fragmentTransaction.commit();
                 break;
             case R.id.disconnect_btn:
                 /*our_menu.getItem(0).setVisible(false);
@@ -93,6 +94,11 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
     @Override
     public void onFragmentInteractionDetails(int id) {
+
+    }
+
+    @Override
+    public void onFragmentInteractionNew(String str) {
 
     }
 

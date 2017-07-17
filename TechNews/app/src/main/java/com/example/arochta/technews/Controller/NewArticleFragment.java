@@ -11,12 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.arochta.technews.Model.Article;
+import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.R;
 
 public class NewArticleFragment extends Fragment {
-    private static final String ARG_PARAM1 = "StudentId";//CHANGE TO ARTICLE ID
+    private static final String ARG_PARAM1 = "ArticleID";//CHANGE TO ARTICLE ID
 
-    private String StId;//CHANGE TO ARTICLE ID
+    private int articleID;//CHANGE TO ARTICLE ID
+
+    Article article;
 
     EditText title;
     EditText author;
@@ -31,10 +35,10 @@ public class NewArticleFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static NewArticleFragment newInstance(String param1) {
+    public static NewArticleFragment newInstance(int id) {
         NewArticleFragment fragment = new NewArticleFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);//return the article that was created
+        args.putInt(ARG_PARAM1, id);//return the article that was created
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +48,7 @@ public class NewArticleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d("tag","on create");
         if (getArguments() != null) {
-            StId = getArguments().getString(ARG_PARAM1);
+            articleID = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -68,17 +72,13 @@ public class NewArticleFragment extends Fragment {
                     toast.show();
                 }
                 else {
-                    Student student = new Student();
-                    student.name = nameEt.getText().toString();
-                    student.id = idEt.getText().toString();
-                    student.phone = phone.getText().toString();
-                    student.address = address.getText().toString();
-                    student.checked = cb.isChecked();
-                    student.myTime = myTime.getText().toString();
-                    student.myDate = myDate.getText().toString();
-                    Model.instace.addStudent(student);
-                    DialogFragment df = new SaveDialog();
-                    df.show(getFragmentManager(),"tag");
+                    Article article = new Article();
+                    article.setTitle(title.getText().toString());
+                    article.setAuthor(author.getText().toString());
+                    article.setContent(content.getText().toString());
+                    Model.instace.addArticle(article);
+                    //DialogFragment df = new SaveDialog();
+                    //df.show(getFragmentManager(),"tag");
                     onButtonPressed("save");
                 }*/
             }
@@ -100,9 +100,9 @@ public class NewArticleFragment extends Fragment {
         getActivity().getFragmentManager().popBackStack();
     }
 
-    public void onButtonPressed(String str) {
+    public void onButtonPressed(int id) {
         if (mListener != null) {
-            mListener.onFragmentInteractionNewSt(str);
+            mListener.onFragmentInteractionNew(id);
         }
     }
 
@@ -123,13 +123,13 @@ public class NewArticleFragment extends Fragment {
         mListener = null;
     }
 
-    public void  passData(String str){
-        mListener.onFragmentInteractionNewSt(str);
+    public void  passData(int id){
+        mListener.onFragmentInteractionNew(id);
     }
 
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteractionNewSt(String str);
+        void onFragmentInteractionNew(int id);
     }
 
 }
