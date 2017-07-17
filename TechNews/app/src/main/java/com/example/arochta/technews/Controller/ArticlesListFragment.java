@@ -68,8 +68,8 @@ public class ArticlesListFragment extends Fragment{
                 //adapter.notifyDataSetChanged();
                 //Intent intent = new Intent(StudentsListActivity.this,StudentDetailsActivity.class);
                 //intent.putExtra("StudentID",data.get(position).id);
-                    //onButtonPressed(data.get(position).id);
-                    //Log.d("TAG","student id selected = " + data.get(position).id);
+                onButtonPressed(data.get(position).getArticleID());
+                //Log.d("TAG","student id selected = " + data.get(position).id);
                 //finish();
                 //startActivityForResult(intent,REQUEST_ADD_ID);
                 //finish();
@@ -78,9 +78,9 @@ public class ArticlesListFragment extends Fragment{
         return contentView;
     }
 
-    public void onButtonPressed(String str) {
+    public void onButtonPressed(int id) {
         if (mListener != null) {
-            mListener.onFragmentInteractionList(str);
+            mListener.onFragmentInteractionList(id);
         }
     }
 
@@ -102,7 +102,7 @@ public class ArticlesListFragment extends Fragment{
     }
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteractionList(String str);
+        void onFragmentInteractionList(int id);
     }
 
     class ArticlesListAdapter extends BaseAdapter {
@@ -135,7 +135,7 @@ public class ArticlesListFragment extends Fragment{
 
             Article article = data.get(position);
             title.setText(article.getTitle());
-            author.setText(article.getAuthor());
+            author.setText(article.getAuthor().getName());
             //imageview.setImageDrawable(res);
 
             return convertView;

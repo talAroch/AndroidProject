@@ -72,13 +72,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="100dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Content:"
-            android:gravity="center" />
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="20dp">
 
         <ScrollView
             android:id="@+id/ScrollView01"

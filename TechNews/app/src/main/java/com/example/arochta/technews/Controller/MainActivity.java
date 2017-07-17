@@ -16,11 +16,12 @@ import android.view.MenuItem;
 import com.example.arochta.technews.R;
 
 
-public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener{
+public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener{
 
     ArticlesListFragment articleListFragment;
+    ArticleShowFragment articleShowFragment;
 
-    static String currentID = "";
+    static int currentID = 0;
 
     private Menu our_menu;
 
@@ -79,10 +80,19 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         return true;
     }
 
-
+    @Override
+    public void onFragmentInteractionList(int id) {
+        currentID = id;
+        our_menu.getItem(0).setVisible(false);
+        our_menu.getItem(1).setVisible(false);
+        articleShowFragment = articleShowFragment.newInstance(id);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
+        fragmentTransaction.commit();
+    }
 
     @Override
-    public void onFragmentInteractionList(String str) {
+    public void onFragmentInteractionDetails(int id) {
 
     }
 
@@ -90,7 +100,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     public void onBackPressed()
     {//super.onBackPressed();
         our_menu.getItem(0).setVisible(true);
-        our_menu.getItem(1).setVisible(false);
+        our_menu.getItem(1).setVisible(true);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
         fragmentTransaction.commit();

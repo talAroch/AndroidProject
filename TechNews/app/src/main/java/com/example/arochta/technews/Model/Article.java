@@ -1,7 +1,5 @@
 package com.example.arochta.technews.Model;
 
-import android.media.Image;
-
 import java.util.Date;
 
 /**
@@ -12,7 +10,7 @@ public class Article {
 
     private int articleID;
     private String title;
-    private String author;//CHANGE TO USER
+    private User author;//CHANGE TO USER
     private Date date;
     private String imgURI;
     private String content;
@@ -35,11 +33,11 @@ public class Article {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 

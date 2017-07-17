@@ -18,7 +18,17 @@
         android:textStyle="italic"
         android:textSize="40dp"
         android:gravity="center"
-        android:layout_margin="50dp"
+        android:layout_margin="30dp"
+        />
+
+    <EditText
+        android:id="@+id/registerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Name"
+        android:layout_marginBottom="20dp"
+        android:inputType="text"
         />
 
     <EditText
@@ -55,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="register"
-        android:layout_margin="40dp"
+        android:layout_margin="30dp"
         android:id="@+id/registerBtn"
         />
 

@@ -27,21 +27,28 @@ public class Model {
         }*/
 
         User user = new User();
+        user.setName("a");
         user.setEmail("a");
         user.setPassword("a");
         users.add(user);
 
         Article article = new Article();
         article.setTitle("a");
-        article.setAuthor("a");
+        article.setAuthor(user);
         article.setContent("a");
+        article.setArticleID(id);
         articles.add(article);
+
+        id++;
 
         Article article2 = new Article();
         article2.setTitle("b");
-        article2.setAuthor("b");
+        article2.setAuthor(user);
         article2.setContent("b");
+        article2.setArticleID(id);
         articles.add(article2);
+
+        id++;
     }
 
     public List<User> getAllUsers(){
@@ -67,9 +74,9 @@ public class Model {
         return null;
     }
 
-    public Article getArticle(String title) {
+    public Article getArticle(int id) {
         for (Article article : articles){
-            if (article.getTitle().equals(title)){
+            if (article.getArticleID() == id){
                 return article;
             }
         }
@@ -85,9 +92,9 @@ public class Model {
         return false;
     }
 
-    public boolean isArticleExist(String title){
+    public boolean isArticleExist(int id){
         for (Article article : articles){
-            if (article.getTitle().equals(title)){
+            if (article.getArticleID() == id){
                 return true;
             }
         }
@@ -110,7 +117,7 @@ public class Model {
     public void deleteArticle(String title) {
         int index = 0;
         for (Article article : articles){
-            if (article.getTitle().equals(title)){
+            if (article.getArticleID() == id){
                 index = users.indexOf(article);
             }
         }

@@ -6,7 +6,9 @@ package com.example.arochta.technews.Model;
 
 public class User {
 
+    int userID;
     private String email;
+    private String name;
     private String password;
 
     public User(){}
@@ -30,5 +32,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
