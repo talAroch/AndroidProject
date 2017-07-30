@@ -116,13 +116,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     }
 
     @Override
-    public void onFragmentInteractionNew(String op) {
-        if(op.compareTo("save") == 0){
-
-        }
-        else if(op.compareTo("cancel") == 0){
-
-        }
+    public void onFragmentInteractionNew() {
         setMenuIcons(true,true,false);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);

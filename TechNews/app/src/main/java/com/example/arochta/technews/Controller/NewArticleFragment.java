@@ -84,7 +84,7 @@ public class NewArticleFragment extends Fragment {
                     Model.instace.addArticle(newArticle);
                     DialogFragment df = new ArticleSaveDialog();
                     df.show(getFragmentManager(),"tag");
-                    onButtonPressed("save");
+                    onButtonPressed();
                 }
             }
         });
@@ -92,7 +92,7 @@ public class NewArticleFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonPressed("cancel");
+                onButtonPressed();
 
 
             }
@@ -105,9 +105,9 @@ public class NewArticleFragment extends Fragment {
         getActivity().getFragmentManager().popBackStack();
     }
 
-    public void onButtonPressed(String op) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteractionNew(op);
+            mListener.onFragmentInteractionNew();
         }
     }
 
@@ -129,12 +129,12 @@ public class NewArticleFragment extends Fragment {
     }
 
     public void  passData(String op){
-        mListener.onFragmentInteractionNew(op);
+        mListener.onFragmentInteractionNew();
     }
 
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteractionNew(String op);
+        void onFragmentInteractionNew();
     }
 
 }
