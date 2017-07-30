@@ -30,12 +30,19 @@ public class Login extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Intent intent = getIntent();
+        String userEmail = intent.getStringExtra("uemail");
+
         email = (EditText)findViewById(R.id.loginEmail);
         password = (EditText)findViewById(R.id.loginPass);
 
         loginbtn = (Button) findViewById(R.id.loginBtn);
 
         registrationLink = (TextView) findViewById(R.id.registerLink);
+
+        if(userEmail != null){
+            email.setText(userEmail);
+        }
     }
 
     @Override
@@ -57,8 +64,10 @@ public class Login extends Activity {
                 else if(isFieldEmpty(password))
                     registerToast("you have to put password");
                 else {
+                    User user = Model.instace.getUser(email.getText().toString());
                     if(Model.instace.isUserInSystem(email.getText().toString(),password.getText().toString())){
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("currentUser",user);
                         startActivity(intent);
                         finish();
                     }

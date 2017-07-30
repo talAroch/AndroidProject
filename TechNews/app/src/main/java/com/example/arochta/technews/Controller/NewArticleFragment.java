@@ -1,6 +1,7 @@
 package com.example.arochta.technews.Controller;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.Model.Model;
+import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
 
 public class NewArticleFragment extends Fragment {
@@ -20,10 +22,12 @@ public class NewArticleFragment extends Fragment {
 
     private int articleID;//CHANGE TO ARTICLE ID
 
-    Article article;
+    User author;
+
+    Article newArticle;
 
     EditText title;
-    EditText author;
+    //EditText author;
     EditText content;
 
     Button saveBtn;
@@ -35,10 +39,10 @@ public class NewArticleFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static NewArticleFragment newInstance(int id) {
+    public static NewArticleFragment newInstance(User user) {
         NewArticleFragment fragment = new NewArticleFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, id);//return the article that was created
+        args.putSerializable(ARG_PARAM1,user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,8 +52,10 @@ public class NewArticleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d("tag","on create");
         if (getArguments() != null) {
-            articleID = getArguments().getInt(ARG_PARAM1);
+            author = (User)getArguments().getSerializable(ARG_PARAM1);
         }
+
+        newArticle = new Article();
     }
 
     @Override
@@ -57,7 +63,7 @@ public class NewArticleFragment extends Fragment {
         View contentView = inflater.inflate(R.layout.fragment_new_article, container, false);
 
         title = (EditText) contentView.findViewById(R.id.new_article_title);
-        author= (EditText) contentView.findViewById(R.id.new_article_author);
+        //author= (EditText) contentView.findViewById(R.id.new_article_author);
         content= (EditText) contentView.findViewById(R.id.new_article_content);
 
         Button saveBtn = (Button) contentView.findViewById(R.id.newSaveBtn);
@@ -67,20 +73,19 @@ public class NewArticleFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(Model.instace.isExist(idEt.getText().toString())){
-                    Toast toast = Toast.makeText(getActivity(), "Student id is already in the system", Toast.LENGTH_LONG);
+                if(Model.instace.isArticleTitleExist(title.getText().toString())){
+                    Toast toast = Toast.makeText(getActivity(), "this title is already in the system", Toast.LENGTH_LONG);
                     toast.show();
                 }
                 else {
-                    Article article = new Article();
-                    article.setTitle(title.getText().toString());
-                    article.setAuthor(author.getText().toString());
-                    article.setContent(content.getText().toString());
-                    Model.instace.addArticle(article);
-                    //DialogFragment df = new SaveDialog();
-                    //df.show(getFragmentManager(),"tag");
+                    newArticle.setTitle(title.getText().toString());
+                    newArticle.setAuthor(author);
+                    newArticle.setContent(content.getText().toString());
+                    Model.instace.addArticle(newArticle);
+                    DialogFragment df = new ArticleSaveDialog();
+                    df.show(getFragmentManager(),"tag");
                     onButtonPressed("save");
-                }*/
+                }
             }
         });
 
@@ -100,9 +105,9 @@ public class NewArticleFragment extends Fragment {
         getActivity().getFragmentManager().popBackStack();
     }
 
-    public void onButtonPressed(int id) {
+    public void onButtonPressed(String op) {
         if (mListener != null) {
-            mListener.onFragmentInteractionNew(id);
+            mListener.onFragmentInteractionNew(op);
         }
     }
 
@@ -123,13 +128,13 @@ public class NewArticleFragment extends Fragment {
         mListener = null;
     }
 
-    public void  passData(int id){
-        mListener.onFragmentInteractionNew(id);
+    public void  passData(String op){
+        mListener.onFragmentInteractionNew(op);
     }
 
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteractionNew(int id);
+        void onFragmentInteractionNew(String op);
     }
 
 }

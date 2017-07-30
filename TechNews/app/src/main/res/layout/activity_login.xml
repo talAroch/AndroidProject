@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.arochta.technews.Controller.Login"
     android:orientation="vertical"
-    android:background="@drawable/background"
+    android:background="#b2ffff"
     >
+    <!--android:background="@drawable/background"-->
     <!--android:background="#b2ffff"-->
 
     <TextView

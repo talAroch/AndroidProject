@@ -53,6 +53,7 @@ public class Registration extends Activity {
                     Model.instace.addUser(user);
                     registerToast("registration was successfull");
                     Intent intent = new Intent(getApplicationContext(), Login.class);
+                    intent.putExtra("uemail",user.getEmail());
                     startActivity(intent);
                     finish();
                 }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/add_btn"
+    <item android:id="@+id/menu_add_btn"
         android:icon="@android:drawable/ic_input_add"
         android:title="Add Article"
         android:showAsAction="ifRoom"/>
-    <item android:id="@+id/disconnect_btn"
+
+    <item android:id="@+id/menu_disconnect_btn"
         android:icon="@android:drawable/ic_menu_revert"
         android:title="Disconnect"
+        android:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/menu_edit_btn"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Edit Article"
         android:showAsAction="ifRoom"/>
 </menu>

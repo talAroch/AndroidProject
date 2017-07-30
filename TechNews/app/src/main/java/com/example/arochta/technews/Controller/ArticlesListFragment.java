@@ -28,6 +28,7 @@ public class ArticlesListFragment extends Fragment{
 
     ListView list;
     List<Article> data;
+    int datasize = 0;
     ArticlesListAdapter adapter;
 
     private OnFragmentInteractionListener mListener;
@@ -48,6 +49,8 @@ public class ArticlesListFragment extends Fragment{
         }
         //TODO:get from DB
         data = Model.instace.getAllArticles();
+        datasize = data.size();
+        //data = swapData(Model.instace.getAllArticles());
     }
 
     @Override
@@ -64,11 +67,12 @@ public class ArticlesListFragment extends Fragment{
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("TAG", "row item was clicked at position: " + position);
+                int newPos = datasize - position-1;
+                //Log.d("newpos", "row item was clicked at position: " + newPos);
                 //adapter.notifyDataSetChanged();
                 //Intent intent = new Intent(StudentsListActivity.this,StudentDetailsActivity.class);
                 //intent.putExtra("StudentID",data.get(position).id);
-                onButtonPressed(data.get(position).getArticleID());
+                onButtonPressed(data.get(newPos).getArticleID());
                 //Log.d("TAG","student id selected = " + data.get(position).id);
                 //finish();
                 //startActivityForResult(intent,REQUEST_ADD_ID);
@@ -133,7 +137,10 @@ public class ArticlesListFragment extends Fragment{
             TextView author = (TextView) convertView.findViewById(R.id.article_row_author);
             ImageView imageview = (ImageView)convertView.findViewById(R.id.article_row_image);
 
-            Article article = data.get(position);
+            //write the newest article first
+            int newPos = datasize - position-1;
+            Article article = data.get(newPos);
+            //Article article = data.get(position);
             title.setText(article.getTitle());
             author.setText(article.getAuthor().getName());
             //imageview.setImageDrawable(res);
@@ -141,5 +148,15 @@ public class ArticlesListFragment extends Fragment{
             return convertView;
         }
     }
+
+    /*public List<Article> swapData(List<Article> articles){
+        int datasize = articles.size();
+        for (int i = 0; i < (datasize/2); i++) {
+            Article temp = articles.get(i);
+            articles.set(i,articles.get(datasize-i-1));
+            articles.set(datasize-i-1,temp);
+        }
+        return articles;
+    }*/
 
 }

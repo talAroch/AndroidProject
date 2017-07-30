@@ -7,35 +7,50 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
 
 
 public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener{
 
+    static User currentUser;
+
     ArticlesListFragment articleListFragment;
     ArticleShowFragment articleShowFragment;
     NewArticleFragment newArticleFragment;
 
-    static int currentID = 0;
+    static int currentArticleID = 0;
 
     private Menu our_menu;
-
+    //menu.getItem(0) - add article
+    //menu.getItem(1) - disconnect
+    //menu.getItem(2) - edit article
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+
+        currentUser = (User)intent.getSerializableExtra("currentUser");
+
+        setTitle("hello, "+ currentUser.getName());
+
         setContentView(R.layout.activity_main);
+
         try{
         getActionBar().setDisplayHomeAsUpEnabled(false);
         }catch (NullPointerException e){
             Log.d("tag","null pointer exeption");
         }
+
         FragmentManager fm = getFragmentManager();
 
         articleListFragment = new ArticlesListFragment();
@@ -54,22 +69,26 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.getItem(0).setVisible(true);
-        menu.getItem(1).setVisible(true);
+        setMenuIcons(true,true,false);
         return super.onPrepareOptionsMenu(menu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-            case R.id.add_btn:
-                newArticleFragment = new NewArticleFragment();
-                our_menu.getItem(0).setVisible(false);
-                our_menu.getItem(1).setVisible(false);
+            case R.id.menu_add_btn:
+                setMenuIcons(false,false,false);
+                newArticleFragment = NewArticleFragment.newInstance(currentUser);
                 fragmentTransaction.replace(R.id.main_fragment_container, newArticleFragment);
                 fragmentTransaction.commit();
                 break;
-            case R.id.disconnect_btn:
+            case R.id.menu_disconnect_btn:
+                setMenuIcons(false,false,false);
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.menu_edit_btn:
                 /*our_menu.getItem(0).setVisible(false);
                 our_menu.getItem(1).setVisible(false);
                 studentEditFragment = StudentEditFragment.newInstance(currentID);
@@ -83,9 +102,8 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
     @Override
     public void onFragmentInteractionList(int id) {
-        currentID = id;
-        our_menu.getItem(0).setVisible(false);
-        our_menu.getItem(1).setVisible(false);
+        currentArticleID = id;
+        setMenuIcons(false,false,false);
         articleShowFragment = articleShowFragment.newInstance(id);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
@@ -98,17 +116,31 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     }
 
     @Override
-    public void onFragmentInteractionNew(String str) {
+    public void onFragmentInteractionNew(String op) {
+        if(op.compareTo("save") == 0){
 
+        }
+        else if(op.compareTo("cancel") == 0){
+
+        }
+        setMenuIcons(true,true,false);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onBackPressed()
     {//super.onBackPressed();
-        our_menu.getItem(0).setVisible(true);
-        our_menu.getItem(1).setVisible(true);
+        setMenuIcons(true,true,false);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
         fragmentTransaction.commit();
+    }
+
+    public void setMenuIcons(boolean add,boolean disconnect,boolean edit){
+        our_menu.getItem(0).setVisible(add);
+        our_menu.getItem(1).setVisible(disconnect);
+        our_menu.getItem(2).setVisible(edit);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.arochta.technews.Model;
 
+import android.util.Log;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class Model {
 
     private List<User> users = new LinkedList<User>();
     private List<Article> articles = new LinkedList<Article>();
-    private int id = 0;
+    private static int id = 1;
 
     private Model(){
         /*for(int i=0;i<2;i++){
@@ -27,28 +29,26 @@ public class Model {
         }*/
 
         User user = new User();
-        user.setName("a");
-        user.setEmail("a");
-        user.setPassword("a");
+        user.setName("tal");
+        user.setEmail("tal@tal.com");
+        user.setPassword("tal");
         users.add(user);
 
-        Article article = new Article();
-        article.setTitle("a");
-        article.setAuthor(user);
-        article.setContent("a");
-        article.setArticleID(id);
-        articles.add(article);
+        for (int i = 1; i < 6; i++) {
+            Article article = new Article();
+            article.setTitle("test"+i);
+            article.setAuthor(user);
+            String content1 = "";
+            for (int j = 0; j < 20; j++) {
+                content1 = content1 + "test"+i;
+            }
+            article.setContent(content1);
+            article.setArticleID(id);
+            articles.add(article);
 
-        id++;
+            id++;
+        }
 
-        Article article2 = new Article();
-        article2.setTitle("b");
-        article2.setAuthor(user);
-        article2.setContent("b");
-        article2.setArticleID(id);
-        articles.add(article2);
-
-        id++;
     }
 
     public List<User> getAllUsers(){
@@ -56,13 +56,31 @@ public class Model {
     }
 
     public List<Article> getAllArticles(){
+        /*Log.d("model","start");
+        for (int i = 0; i < articles.size(); i++) {
+            Log.d("model",articles.get(i).getTitle());
+        }
+        Log.d("model","end");*/
+
         return  articles;
     }
 
     public void addUser(User user){users.add(user);}
 
     public void addArticle(Article article){
+        article.setArticleID(getHighestArticleID()+1);
         articles.add(article);
+        id++;
+    }
+
+    public int getHighestArticleID(){
+        int max = 0;
+        for (Article article : articles){
+            if (article.getArticleID() > max){
+                max = article.getArticleID();
+            }
+        }
+        return max;
     }
 
     public User getUser(String userEmail) {
@@ -101,6 +119,15 @@ public class Model {
         return false;
     }
 
+    public boolean isArticleTitleExist(String title){
+        for (Article article : articles){
+            if (article.getTitle().compareTo(title) == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void deleteUser(String userEmail) {
         int index = 0;
         for (User user : users){
@@ -130,6 +157,15 @@ public class Model {
     public boolean isUserInSystem(String userEmail,String userPassword){
         for (User s : users){
             if (s.getEmail().equals(userEmail) && s.getPassword().equals(userPassword)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isUserInSystem(User user){
+        for (User s : users){
+            if (s.getEmail().equals(user.getEmail()) && s.getPassword().equals(user.getPassword())){
                 return true;
             }
         }

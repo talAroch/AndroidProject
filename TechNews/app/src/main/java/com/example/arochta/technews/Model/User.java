@@ -1,10 +1,12 @@
 package com.example.arochta.technews.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by arochta on 17/07/2017.
  */
 
-public class User {
+public class User implements Serializable{
 
     int userID;
     private String email;
@@ -14,6 +16,11 @@ public class User {
     public User(){}
 
     public User(String email, String password){
+        this.email  = email;
+        this.password = password;
+    }
+
+    public User(String name,String email, String password){
         this.email  = email;
         this.password = password;
     }
