@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.arochta.technews.Controller.Registration"
     android:orientation="vertical"
-    android:background="#b2ffff"
+    android:background="@drawable/appbackground"
     >
     <!--android:background="@drawable/background"-->
     <!--android:background="#b2ffff"-->

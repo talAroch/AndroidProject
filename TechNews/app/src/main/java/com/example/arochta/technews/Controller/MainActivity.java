@@ -18,15 +18,15 @@ import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
 
 
-public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener{
+public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener,EditArticleFragment.OnFragmentInteractionListener{
 
     static User currentUser;
+    static int currentArticleID = 0;
 
     ArticlesListFragment articleListFragment;
     ArticleShowFragment articleShowFragment;
     NewArticleFragment newArticleFragment;
-
-    static int currentArticleID = 0;
+    EditArticleFragment editArticleFragment;
 
     private Menu our_menu;
     //menu.getItem(0) - add article
@@ -89,11 +89,10 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
                 finish();
                 break;
             case R.id.menu_edit_btn:
-                /*our_menu.getItem(0).setVisible(false);
-                our_menu.getItem(1).setVisible(false);
-                studentEditFragment = StudentEditFragment.newInstance(currentID);
-                fragmentTransaction.replace(R.id.main_fragment_container, studentEditFragment);
-                fragmentTransaction.commit();*/
+                setMenuIcons(false,false,false);
+                editArticleFragment = editArticleFragment.newInstance(currentArticleID);
+                fragmentTransaction.replace(R.id.main_fragment_container, editArticleFragment);
+                fragmentTransaction.commit();
                 break;
 
         }
@@ -103,7 +102,8 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     @Override
     public void onFragmentInteractionList(int id) {
         currentArticleID = id;
-        setMenuIcons(false,false,false);
+        //verify the user;
+        setMenuIcons(false,false,true);
         articleShowFragment = articleShowFragment.newInstance(id);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
@@ -130,6 +130,22 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     }
 
     @Override
+    public void onFragmentInteractionEdit(int articleID) {
+        if(articleID == -1){
+            setMenuIcons(true,true,false);
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
+            fragmentTransaction.commit();
+        }
+        else{
+            articleShowFragment = articleShowFragment.newInstance(articleID);
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
     public void onBackPressed()
     {//super.onBackPressed();
         setMenuIcons(true,true,false);
@@ -143,4 +159,5 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         our_menu.getItem(1).setVisible(disconnect);
         our_menu.getItem(2).setVisible(edit);
     }
+
 }

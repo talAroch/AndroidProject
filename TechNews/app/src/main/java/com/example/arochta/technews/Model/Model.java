@@ -145,14 +145,43 @@ public class Model {
         int index = 0;
         for (Article article : articles){
             if (article.getArticleID() == id){
-                index = users.indexOf(article);
+                index = articles.indexOf(article);
             }
         }
         if(index<0) {
             return;
         }
-        users.remove(index);
+        articles.remove(index);
     }
+
+    public void deleteArticle(Article ar) {
+        int index = 0;
+        for (Article article : articles){
+            if (article.equals(ar)){
+                index = articles.indexOf(article);
+                break;
+            }
+        }
+        if(index<0) {
+            return;
+        }
+        articles.remove(index);
+    }
+
+    public void deleteArticle(int id) {
+        int index = 0;
+        for (Article article : articles){
+            if (article.getArticleID() == id){
+                index = articles.indexOf(article);
+            }
+        }
+        if(index<0) {
+            return;
+        }
+        articles.remove(index);
+    }
+
+
 
     public boolean isUserInSystem(String userEmail,String userPassword){
         for (User s : users){
