@@ -11,13 +11,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="New Article"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +69,8 @@
         <ScrollView
             android:id="@+id/ScrollView01"
             android:layout_width="wrap_content"
-            android:layout_height="150dip">
+            android:layout_height="150dip"
+            >
 
             <EditText
                 android:layout_width="wrap_content"
@@ -82,7 +87,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:layout_gravity="bottom">
 
         <Button
             android:id="@+id/newSaveBtn"
@@ -101,7 +108,5 @@
 
 
     </LinearLayout>
-
-
 
 </LinearLayout>

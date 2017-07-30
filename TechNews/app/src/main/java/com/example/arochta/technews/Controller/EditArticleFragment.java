@@ -84,9 +84,11 @@ public class EditArticleFragment extends Fragment {
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(Model.instace.isArticleTitleExist(title.getText().toString())){
-                    Toast toast = Toast.makeText(getActivity(), "this title is already in the system", Toast.LENGTH_LONG);
-                    toast.show();
+                if(title.getText().toString().compareTo(article.getTitle()) != 0) {
+                    if (Model.instace.isArticleTitleExist(title.getText().toString())) {
+                        Toast toast = Toast.makeText(getActivity(), "this title is already in the system", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
                 else {
                     Model.instace.deleteArticle(articleId);

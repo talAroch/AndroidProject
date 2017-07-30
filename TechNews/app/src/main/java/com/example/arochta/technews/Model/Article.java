@@ -1,5 +1,9 @@
 package com.example.arochta.technews.Model;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,11 +15,21 @@ public class Article {
     private int articleID;
     private String title;
     private User author;//CHANGE TO USER
-    private Date date;
+    private SimpleDateFormat sdf;
+    private String date;
     private String imgURI;
     private String content;
 
-    public Article(){}
+    public Article(){
+        articleID = 0;
+        title = "";
+        author = null;
+        sdf = new SimpleDateFormat("dd/M/yyyy");
+        date = sdf.format(new Date());
+        Log.d("model", date);
+        imgURI = "";
+        content = "";
+    }
 
     public int getArticleID() {
         return articleID;
@@ -41,11 +55,11 @@ public class Article {
         this.author = author;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

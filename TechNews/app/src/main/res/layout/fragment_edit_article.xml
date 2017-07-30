@@ -8,7 +8,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Edit Article"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,18 +53,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Content:"
-                android:gravity="center" />
+                android:gravity="center"
+                />
 
             <ScrollView
                 android:id="@+id/ScrollView01"
                 android:layout_width="wrap_content"
-                android:layout_height="150dip">
+                android:layout_height="150dip"
+                android:layout_weight="1">
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -79,7 +84,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <Button
                 android:id="@+id/editSaveBtn"

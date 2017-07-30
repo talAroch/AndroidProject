@@ -29,6 +29,7 @@ public class ArticleShowFragment extends Fragment {
 
     TextView title;
     TextView author;
+    TextView date;
     TextView content;
 
     Article article;
@@ -67,6 +68,7 @@ public class ArticleShowFragment extends Fragment {
 
         title = (TextView) contentView.findViewById(R.id.show_article_title);
         author = (TextView) contentView.findViewById(R.id.show_article_author);
+        date = (TextView) contentView.findViewById(R.id.show_article_date);
         content = (TextView) contentView.findViewById(R.id.show_article_content);
 
         return contentView;
@@ -78,6 +80,7 @@ public class ArticleShowFragment extends Fragment {
         //TODO: set image
         title.setText(article.getTitle());
         author.setText(article.getAuthor().getName());
+        date.setText(article.getDate());
         content.setText(article.getContent());
     }
 
