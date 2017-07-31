@@ -26,7 +26,6 @@ public class Article {
         author = null;
         sdf = new SimpleDateFormat("dd/M/yyyy");
         date = sdf.format(new Date());
-        Log.d("model", date);
         imgURI = "";
         content = "";
     }

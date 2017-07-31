@@ -18,6 +18,7 @@
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/edit_article_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"

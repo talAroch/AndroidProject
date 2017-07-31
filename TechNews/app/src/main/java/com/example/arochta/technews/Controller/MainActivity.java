@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,9 +34,18 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     //menu.getItem(1) - disconnect
     //menu.getItem(2) - edit article
 
+    static Context contextOfApplication;
+
+    public static Context getContextOfApplication()
+    {
+        return contextOfApplication;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        contextOfApplication = getApplicationContext();
 
         Intent intent = getIntent();
 

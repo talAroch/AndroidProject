@@ -2,9 +2,12 @@ package com.example.arochta.technews.Controller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +37,7 @@ public class ArticleShowFragment extends Fragment {
 
     Article article;
 
+    Context applicationContext = MainActivity.getContextOfApplication();
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,6 +85,7 @@ public class ArticleShowFragment extends Fragment {
         title.setText(article.getTitle());
         author.setText(article.getAuthor().getName());
         date.setText(article.getDate());
+        //articleImg.setImageBitmap();
         content.setText(article.getContent());
     }
 
