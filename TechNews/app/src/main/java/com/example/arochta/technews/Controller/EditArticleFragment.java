@@ -106,14 +106,7 @@ public class EditArticleFragment extends Fragment {
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(title.getText().toString().compareTo(article.getTitle()) != 0) {
-                    if (Model.instace.isArticleTitleExist(title.getText().toString())) {
-                        Toast toast = Toast.makeText(getActivity(), "this title is already in the system", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                }
-                else {
-                    Model.instace.deleteArticle(articleId);
+                    article.setArticleID(articleId);
                     article.setTitle(title.getText().toString());
                     Log.d("model", "artcileID " + articleId);
                     String fileName = articleId + ".jpeg";
@@ -121,11 +114,12 @@ public class EditArticleFragment extends Fragment {
                     Model.instace.saveImageToFile(imageBitmap,fileName);
                     article.setImg(fileName);
                     article.setContent(content.getText().toString());
-                    Model.instace.addArticle(article);
+                    Log.d("edit", "1" + article.toString());
+                    Model.instace.editArticle(article);
+                    Log.d("edit", "3");
                     DialogFragment df = new ArticleSaveDialog();
                     df.show(getFragmentManager(),"tag");
                     onButtonPressed(article.getArticleID());
-                }
             }
         });
 

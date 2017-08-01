@@ -102,9 +102,10 @@ public class NewArticleFragment extends Fragment {
                     toast.show();
                 }
                 else {
+                    newArticle.setArticleID(Model.instace.generateID());
                     newArticle.setTitle(title.getText().toString());
                     newArticle.setAuthor(author);
-                    String fileName = (Model.instace.getHighestArticleID()+1) + ".jpeg";
+                    String fileName = (newArticle.getArticleID()) + ".jpeg";
                     Log.d("new",fileName);
                     Model.instace.saveImageToFile(imageBitmap,fileName);
                     newArticle.setImg(fileName);

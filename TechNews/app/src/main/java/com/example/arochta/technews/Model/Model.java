@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import com.example.arochta.technews.Controller.MainActivity;
 import com.example.arochta.technews.Model.Article;
@@ -66,13 +67,19 @@ public class Model {
         return  ArticleSQL.getAllArticles(modelSql.getReadableDatabase());
     }
 
-    public void addUser(User user){users.add(user);}
+    public void addUser(User user){
+        UserSQL.addUser(modelSql.getReadableDatabase(),user);
+    }
 
     public void addArticle(Article article){
-        //article.setArticleID(getHighestArticleID()+1);
         //articles.add(article);
         ArticleSQL.addArticle(modelSql.getReadableDatabase(),article);
         id++;
+    }
+
+    public void editArticle(Article article){
+        Log.d("edit", "3");
+        ArticleSQL.editArticle(modelSql.getReadableDatabase(),article);
     }
 
     public int getHighestArticleID(){
@@ -92,16 +99,17 @@ public class Model {
             }
         }
         return null;
-        
+
+    }
+
+    public int generateID(){
+        Random rand = new Random();
+        int  n = rand.nextInt(Integer.MAX_VALUE) + 1;
+        return n;
     }
 
     public Article getArticle(int id) {
-        for (Article article : articles){
-            if (article.getArticleID() == id){
-                return article;
-            }
-        }
-        return null;
+        return ArticleSQL.getArticle(modelSql.getReadableDatabase(),id+"");
     }
 
     public boolean isUserExist(String userEmail){
@@ -186,13 +194,14 @@ public class Model {
 
 
 
-    public boolean isUserInSystem(String userEmail,String userPassword){
-        for (User s : users){
-            if (s.getEmail().equals(userEmail) && s.getPassword().equals(userPassword)){
-                return true;
-            }
-        }
-        return false;
+    public User isUserInSystem(String userEmail,String userPassword){
+        User user = new User();
+        user.setUserID(20);
+        user.setName("idan");
+        user.setEmail("idan@idan.com");
+        user.setPassword("1");
+        return user;
+        //UserSQL.validateUser(modelSql.getReadableDatabase(),userEmail,userPassword);
     }
 
     public boolean isUserInSystem(User user){

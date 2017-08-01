@@ -47,6 +47,8 @@ public class Registration extends Activity {
                     registerToast("you have to put password");
                 else if(verifyPassword()) {
                     User user = new User();
+                    user.setUserID(Model.instace.generateID());
+                    //user.setUserID(20);
                     user.setName(name.getText().toString());
                     user.setEmail(email.getText().toString());
                     user.setPassword(password.getText().toString());

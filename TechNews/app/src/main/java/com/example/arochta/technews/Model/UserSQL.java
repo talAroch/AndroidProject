@@ -57,7 +57,7 @@ public class UserSQL {
         User user = null;
         String colummns[] = new String[1];
         colummns[0] = userID;
-        Cursor cursor = db.query(USER_TABLE, colummns, userID, null, null, null, null);
+        Cursor cursor = db.query(USER_TABLE, null, USER_ID+"="+userID, null, null, null, null);
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(USER_ID);
             int emailIndex = cursor.getColumnIndex(USER_EMAIL);
@@ -69,6 +69,27 @@ public class UserSQL {
             user.setEmail(cursor.getString(emailIndex));
             user.setName(cursor.getString(nameIndex));
             user.setPassword(cursor.getString(passwordIndex));
+        }
+        return user;
+    }
+
+    static User validateUser(SQLiteDatabase db, String email,String password) {
+        User user = null;
+        String newEmail = "";
+        newEmail = email.replace("@","%@");
+        Cursor cursor = db.query(USER_TABLE, null, USER_EMAIL+"="+newEmail+" AND "+USER_PASSWORD+"="+password, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(USER_ID);
+            int emailIndex = cursor.getColumnIndex(USER_EMAIL);
+            int nameIndex = cursor.getColumnIndex(USER_NAME);
+            int passwordIndex = cursor.getColumnIndex(USER_PASSWORD);
+
+            user = new User();
+            user.setUserID(cursor.getInt(idIndex));
+            user.setEmail(cursor.getString(emailIndex));
+            user.setName(cursor.getString(nameIndex));
+            user.setPassword(cursor.getString(passwordIndex));
+            return user;
         }
         return user;
     }

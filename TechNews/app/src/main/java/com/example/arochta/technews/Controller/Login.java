@@ -64,8 +64,8 @@ public class Login extends Activity {
                 else if(isFieldEmpty(password))
                     registerToast("you have to put password");
                 else {
-                    User user = Model.instace.getUser(email.getText().toString());
-                    if(Model.instace.isUserInSystem(email.getText().toString(),password.getText().toString())){
+                    User user = Model.instace.isUserInSystem(email.getText().toString(),password.getText().toString());
+                    if(user != null){
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("currentUser",user);
                         startActivity(intent);

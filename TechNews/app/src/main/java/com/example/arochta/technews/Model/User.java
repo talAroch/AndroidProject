@@ -13,7 +13,12 @@ public class User implements Serializable{
     private String name;
     private String password;
 
-    public User(){}
+    public User(){
+        this.userID = 1;
+        this.email = "tal@tal.com";
+        this.name = "tal a";
+        this.password = "tal";
+    }
 
     public User(String email, String password){
         this.email  = email;
@@ -21,6 +26,7 @@ public class User implements Serializable{
     }
 
     public User(String name,String email, String password){
+        this.name = name;
         this.email  = email;
         this.password = password;
     }

@@ -19,9 +19,9 @@ public class Article {
     private String date;
     private String imgURI;
     private String content;
-
-
     private boolean wasDeleted;//logical deletion
+
+
     public Article(){
         articleID = 0;
         title = "";
@@ -30,7 +30,7 @@ public class Article {
         date = sdf.format(new Date());
         imgURI = "";
         content = "";
-
+        wasDeleted = false;
     }
 
 
@@ -88,5 +88,16 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        String str = "articleId: " +articleID +". \n"+
+                "title: " +title +". \n"+
+                "author: " +author.getUserID() +". \n"+
+                "date: " +date +". \n"+
+                "image: " +imgURI +". \n"+
+                "content: " +content +". \n";
+        return str;
     }
 }

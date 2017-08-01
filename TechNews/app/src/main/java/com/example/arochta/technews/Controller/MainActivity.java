@@ -64,7 +64,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         Intent intent = getIntent();
 
         currentUser = (User)intent.getSerializableExtra("currentUser");
-
+        Log.d("user", currentUser.getUserID()+"");
         setTitle("hello, "+ currentUser.getName());
 
         setContentView(R.layout.activity_main);
@@ -160,7 +160,6 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     @Override
     public void onFragmentInteractionEdit(int articleID) {
         if(articleID == -1){
-            setMenuIcons(true,true,false);
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
             fragmentTransaction.commit();
@@ -171,6 +170,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
             fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
             fragmentTransaction.commit();
         }
+        setMenuIcons(true,true,false);
     }
 
     @Override
