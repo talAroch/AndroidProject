@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -89,6 +90,8 @@ public class EditArticleFragment extends Fragment {
         deleteBtn = (Button) contentView.findViewById(R.id.editDeleteBtn);
         cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
 
+        imageBitmap = Model.instace.loadImageFromFile(article.getImg());
+
         return contentView;
     }
 
@@ -97,6 +100,8 @@ public class EditArticleFragment extends Fragment {
         super.onStart();
 
         title.setText(article.getTitle());
+        Log.d("model", "load " + article.getImg());
+        imageView.setImageBitmap(imageBitmap);
         content.setText(article.getContent());
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +115,11 @@ public class EditArticleFragment extends Fragment {
                 else {
                     Model.instace.deleteArticle(articleId);
                     article.setTitle(title.getText().toString());
+                    Log.d("model", "artcileID " + articleId);
+                    String fileName = articleId + ".jpeg";
+                    Log.d("model", "save " + fileName);
+                    Model.instace.saveImageToFile(imageBitmap,fileName);
+                    article.setImg(fileName);
                     article.setContent(content.getText().toString());
                     Model.instace.addArticle(article);
                     DialogFragment df = new ArticleSaveDialog();
@@ -136,11 +146,13 @@ public class EditArticleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 imageBitmap = null;
-
                 dispatchTakePictureIntent();
+
             }
         });
     }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private void dispatchTakePictureIntent() {
         Intent pickIntent = new Intent();
@@ -154,17 +166,19 @@ public class EditArticleFragment extends Fragment {
                         Intent.EXTRA_INITIAL_INTENTS,
                         new Intent[] { takePhotoIntent }
                 );
-        startActivityForResult(chooserIntent, 1);
+        startActivityForResult(chooserIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             if(data.getData() != null) {
                 try {
                     InputStream inputStream = applicationContext.getContentResolver().openInputStream(data.getData());
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    Log.d("model", "before model");
                     getPicture(bitmap);
+                    Log.d("model", "after model");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -185,8 +199,10 @@ public class EditArticleFragment extends Fragment {
     public void getPicture(Bitmap bitmap){
         //progressBar.setVisibility(GONE);
         imageBitmap = bitmap;
-        if(bitmap != null)
-            imageView.setImageBitmap(bitmap);
+        if(imageBitmap != null)
+            Log.d("model", "3");
+            imageView.setImageBitmap(imageBitmap);
+        Log.d("model", "4");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

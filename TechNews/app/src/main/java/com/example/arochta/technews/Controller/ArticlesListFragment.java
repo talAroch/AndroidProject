@@ -1,6 +1,7 @@
 package com.example.arochta.technews.Controller;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -143,7 +144,8 @@ public class ArticlesListFragment extends Fragment{
             //Article article = data.get(position);
             title.setText(article.getTitle());
             author.setText(article.getAuthor().getName());
-            //imageview.setImageDrawable(res);
+            Bitmap bitmap = Model.instace.loadImageFromFile(article.getImg());
+            imageview.setImageBitmap(bitmap);
 
             return convertView;
         }

@@ -20,6 +20,8 @@ public class Article {
     private String imgURI;
     private String content;
 
+
+    private boolean wasDeleted;//logical deletion
     public Article(){
         articleID = 0;
         title = "";
@@ -28,6 +30,16 @@ public class Article {
         date = sdf.format(new Date());
         imgURI = "";
         content = "";
+
+    }
+
+
+    public boolean isWasDeleted() {
+        return wasDeleted;
+    }
+
+    public void setWasDeleted(boolean wasDeleted) {
+        this.wasDeleted = wasDeleted;
     }
 
     public int getArticleID() {

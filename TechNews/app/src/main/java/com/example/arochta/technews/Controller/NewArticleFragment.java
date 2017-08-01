@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -103,8 +104,10 @@ public class NewArticleFragment extends Fragment {
                 else {
                     newArticle.setTitle(title.getText().toString());
                     newArticle.setAuthor(author);
-                    //newArticle.setImg(getImageUri(applicationContext,imageBitmap).toString());
-                    //Log.d("model", newArticle.getImg());
+                    String fileName = (Model.instace.getHighestArticleID()+1) + ".jpeg";
+                    Log.d("new",fileName);
+                    Model.instace.saveImageToFile(imageBitmap,fileName);
+                    newArticle.setImg(fileName);
                     newArticle.setContent(content.getText().toString());
                     Model.instace.addArticle(newArticle);
                     DialogFragment df = new ArticleSaveDialog();
@@ -134,6 +137,8 @@ public class NewArticleFragment extends Fragment {
         return contentView;
     }
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private void dispatchTakePictureIntent() {
         Intent pickIntent = new Intent();
         pickIntent.setType("image/*");
@@ -146,12 +151,12 @@ public class NewArticleFragment extends Fragment {
                         Intent.EXTRA_INITIAL_INTENTS,
                         new Intent[] { takePhotoIntent }
                 );
-        startActivityForResult(chooserIntent, 1);
+        startActivityForResult(chooserIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             if(data.getData() != null) {
                 try {
                     InputStream inputStream = applicationContext.getContentResolver().openInputStream(data.getData());
