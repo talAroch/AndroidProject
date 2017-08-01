@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
@@ -28,6 +30,9 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     ArticleShowFragment articleShowFragment;
     NewArticleFragment newArticleFragment;
     EditArticleFragment editArticleFragment;
+
+    //MyProgressBar progressBar;
+    ProgressDialog progressBar;
 
     private Menu our_menu;
     //menu.getItem(0) - add article
@@ -46,6 +51,15 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         super.onCreate(savedInstanceState);
 
         contextOfApplication = getApplicationContext();
+
+        progressBar = new ProgressDialog(MainActivity.this);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setIndeterminate(true);
+        progressBar.setCanceledOnTouchOutside(false);
+        progressBar.setTitle("Loading");
+        progressBar.setMessage("please wait...");
+        progressBar.show();
+        progressBar.dismiss();
 
         Intent intent = getIntent();
 
@@ -93,9 +107,19 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
                 fragmentTransaction.commit();
                 break;
             case R.id.menu_disconnect_btn:
+                //Log.d("pb", "3");
+                //progressBar.setDialogMessage("disconnecting");
+                //progressBar.showDialog();
+                //Log.d("pb", "4");
+                progressBar.show(MainActivity.this,"disconnecting","");
+                Log.d("pb", "after show");
                 setMenuIcons(false,false,false);
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
+                //Log.d("pb", "5");
+                //progressBar.dismissDialog();
+                //Log.d("pb", "6");
+                progressBar.dismiss();
                 finish();
                 break;
             case R.id.menu_edit_btn:
