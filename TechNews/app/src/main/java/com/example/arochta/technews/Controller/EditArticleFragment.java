@@ -90,7 +90,17 @@ public class EditArticleFragment extends Fragment {
         deleteBtn = (Button) contentView.findViewById(R.id.editDeleteBtn);
         cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
 
-        imageBitmap = Model.instace.loadImageFromFile(article.getImg());
+        Model.instace.getImage(article.getImg(), new Model.GetImageListener() {
+            @Override
+            public void onSuccess(Bitmap image) {
+                imageBitmap = image;
+            }
+
+            @Override
+            public void onFail() {
+                Log.d("showImg","fail");
+            }
+        });
 
         return contentView;
     }
@@ -106,26 +116,32 @@ public class EditArticleFragment extends Fragment {
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                    article.setArticleID(articleId);
-                    article.setTitle(title.getText().toString());
-                    Log.d("model", "artcileID " + articleId);
-                    String fileName = articleId + ".jpeg";
-                    Log.d("model", "save " + fileName);
-                    Model.instace.saveImageToFile(imageBitmap,fileName);
-                    article.setImg(fileName);
-                    article.setContent(content.getText().toString());
-                    Log.d("edit", "1" + article.toString());
+                article.setArticleID(articleId);
+                article.setTitle(title.getText().toString());
+                article.setContent(content.getText().toString());
+                String fileName = articleId + ".jpeg";
+                Model.instace.saveImage(imageBitmap, fileName, new Model.SaveImageListener() {
+                @Override
+                public void complete(String url) {
+                    article.setImg(url);
                     Model.instace.editArticle(article);
-                    Log.d("edit", "3");
                     DialogFragment df = new ArticleSaveDialog();
                     df.show(getFragmentManager(),"tag");
-                    onButtonPressed(article.getArticleID());
+                }
+
+                @Override
+                public void fail() {
+
+                    article.setImg("");
+                }
+                });
+                onButtonPressed(article.getArticleID());
             }
         });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Model.instace.deleteArticle(articleId);
+                Model.instace.deleteArticle(article);
                 onButtonPressed(-1);
             }
         });

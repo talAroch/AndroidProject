@@ -17,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import com.example.arochta.technews.Model.Article;
+import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.R;
 
 
@@ -107,18 +109,11 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
                 fragmentTransaction.commit();
                 break;
             case R.id.menu_disconnect_btn:
-                //Log.d("pb", "3");
                 //progressBar.setDialogMessage("disconnecting");
-                //progressBar.showDialog();
-                //Log.d("pb", "4");
-                //progressBar.setDialogMessage("disconnecting");
-                Log.d("pb", "after show");
                 setMenuIcons(false,false,false);
+                Model.instace.signOut();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
-                //Log.d("pb", "5");
-                //progressBar.dismissDialog();
-                //Log.d("pb", "6");
                 //progressBar.dismissDialog();
                 finish();
                 break;
@@ -137,7 +132,9 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     public void onFragmentInteractionList(int id) {
         currentArticleID = id;
         //verify the user;
-        setMenuIcons(false,false,true);
+        if(Model.instace.isAuthor(id))
+            setMenuIcons(false,false,true);
+        setMenuIcons(false,false,false);
         articleShowFragment = articleShowFragment.newInstance(id);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);

@@ -96,24 +96,29 @@ public class NewArticleFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Model.instace.isArticleTitleExist(title.getText().toString())){
-                    Toast toast = Toast.makeText(getActivity(), "this title is already in the system", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-                else {
-                    newArticle.setArticleID(Model.instace.generateID());
-                    newArticle.setTitle(title.getText().toString());
-                    newArticle.setAuthor(author);
-                    String fileName = (newArticle.getArticleID()) + ".jpeg";
-                    Log.d("new",fileName);
-                    Model.instace.saveImageToFile(imageBitmap,fileName);
-                    newArticle.setImg(fileName);
-                    newArticle.setContent(content.getText().toString());
-                    Model.instace.addArticle(newArticle);
-                    DialogFragment df = new ArticleSaveDialog();
-                    df.show(getFragmentManager(),"tag");
-                    onButtonPressed();
-                }
+                newArticle.setArticleID(Model.instace.generateID());
+                newArticle.setTitle(title.getText().toString());
+                newArticle.setAuthor(author);
+                newArticle.setContent(content.getText().toString());
+                String fileName = (newArticle.getArticleID()) + ".jpeg";
+                Log.d("new",fileName);
+                if(imageBitmap != null)
+                    Log.d("new", "is not null");
+                Model.instace.saveImage(imageBitmap, fileName, new Model.SaveImageListener() {
+                    @Override
+                    public void complete(String url) {
+                        newArticle.setImg(url);
+                        Model.instace.addArticle(newArticle);
+                        DialogFragment df = new ArticleSaveDialog();
+                        df.show(getFragmentManager(),"tag");
+                    }
+
+                    @Override
+                    public void fail() {
+                        newArticle.setImg("");
+                    }
+                });
+                onButtonPressed();
             }
         });
 
@@ -121,8 +126,6 @@ public class NewArticleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onButtonPressed();
-
-
             }
         });
 

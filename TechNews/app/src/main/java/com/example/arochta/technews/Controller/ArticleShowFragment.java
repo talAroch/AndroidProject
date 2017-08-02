@@ -85,9 +85,18 @@ public class ArticleShowFragment extends Fragment {
         title.setText(article.getTitle());
         author.setText(article.getAuthor());
         date.setText(article.getDate());
-        Bitmap bitmap = Model.instace.loadImageFromFile(article.getImg());
-        articleImg.setImageBitmap(bitmap);
         content.setText(article.getContent());
+        Model.instace.getImage(article.getImg(), new Model.GetImageListener() {
+            @Override
+            public void onSuccess(Bitmap image) {
+                articleImg.setImageBitmap(image);
+            }
+
+            @Override
+            public void onFail() {
+                Log.d("showImg","fail");
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

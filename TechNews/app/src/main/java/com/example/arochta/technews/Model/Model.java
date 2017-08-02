@@ -158,6 +158,12 @@ public class Model {
         modelFirebase.articleFirebase.editArticle(article);
     }
 
+    public boolean isAuthor(int articleID){
+        Article article = getArticle(articleID);
+        String currentEmail = getCurrentUserEmail();
+        return (article.getAuthor().compareTo(currentEmail) == 0);
+    }
+
     //////////////////////////
     //////////////////////////
     //////////////////////////
@@ -171,8 +177,8 @@ public class Model {
         void fail();
     }
 
-    public void saveImage(final Bitmap imageBmp, final String name, final SaveImageListener listener) {
-        modelFirebase.articleFirebase.saveImage(imageBmp, name, new SaveImageListener() {
+    public void saveImage(final Bitmap imageBmp, final String fileName, final SaveImageListener listener) {
+        modelFirebase.articleFirebase.saveImage(imageBmp, fileName, new SaveImageListener() {
             @Override
             public void complete(String url) {
                 String fileName = URLUtil.guessFileName(url, null, null);

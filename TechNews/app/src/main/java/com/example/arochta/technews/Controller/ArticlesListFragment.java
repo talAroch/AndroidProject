@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.Model.ArticleFirebase;
@@ -21,6 +22,11 @@ import com.example.arochta.technews.R;
 
 import com.example.arochta.technews.Model.Model;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.LinkedList;
 import java.util.List;
 /**
  * Created by arochta on 17/07/2017.
@@ -44,12 +50,33 @@ public class ArticlesListFragment extends Fragment{
         return fragment;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Model.UpdateArticleEvent event) {
+        Toast.makeText(getActivity(), "got new article event", Toast.LENGTH_SHORT).show();
+        boolean exist = false;
+        for (Article article: data){
+            if (article.getArticleID() == (event.article.getArticleID())){
+                article = event.article;
+                exist = true;
+                break;
+            }
+        }
+        if (!exist){
+            data.add(event.article);
+        }
+        adapter.notifyDataSetChanged();
+        list.setSelection(adapter.getCount() - 1);
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-        //TODO:get from DB
+        data = new LinkedList<Article>();
+        /*//TODO:get from DB
+
         Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
             @Override
             public void onComplete(List<Article> list) {
@@ -60,7 +87,7 @@ public class ArticlesListFragment extends Fragment{
             public void onCancel() {
                 data = null;
             }
-        });
+        });*/
         datasize = data.size();
         //data = swapData(Model.instace.getAllArticles());
     }
@@ -91,6 +118,22 @@ public class ArticlesListFragment extends Fragment{
                 //finish();
             }
         });
+
+        Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
+            @Override
+            public void onComplete(List<Article> list) {
+                data = list;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+        EventBus.getDefault().register(this);
+
         return contentView;
     }
 
@@ -115,6 +158,12 @@ public class ArticlesListFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     public interface OnFragmentInteractionListener {

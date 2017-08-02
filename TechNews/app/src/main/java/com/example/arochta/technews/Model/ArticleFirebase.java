@@ -47,7 +47,7 @@ public class ArticleFirebase {
         addArticle(article);
     }
 
-    interface GetArticleCallback {
+    public interface GetArticleCallback {
         void onComplete(Article article);
         void onCancel();
     }
@@ -69,7 +69,7 @@ public class ArticleFirebase {
         });
     }
 
-    interface GetAllArticlesAndObserveCallback {
+    public interface GetAllArticlesAndObserveCallback {
         void onComplete(List<Article> list);
         void onCancel();
     }
@@ -139,7 +139,7 @@ public class ArticleFirebase {
         });
     }
 
-    interface RegisterArticlesUpdatesCallback{
+    public interface RegisterArticlesUpdatesCallback{
         void onArticleUpdate(Article article);
     }
 
