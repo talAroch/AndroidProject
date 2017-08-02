@@ -1,10 +1,8 @@
 package com.example.arochta.technews.Model;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -18,7 +16,7 @@ public class ArticleSQL {
     static final String ARTICLE_TABLE = "articles";
     static final String ARTICLE_ID = "articleID";
     static final String ARTICLE_TITLE = "title";
-    static final String ARTICLE_AUTHOR_ID = "authorID";
+    static final String ARTICLE_AUTHOR = "author";
     static final String ARTICLE_DATE = "date";
     static final String ARTICLE_IMAGE_URI = "imageuri";
     static final String ARTICLE_CONTENT = "content";
@@ -30,7 +28,7 @@ public class ArticleSQL {
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(ARTICLE_ID);
             int titleIndex = cursor.getColumnIndex(ARTICLE_TITLE);
-            int authorIndex = cursor.getColumnIndex(ARTICLE_AUTHOR_ID);
+            int authorIndex = cursor.getColumnIndex(ARTICLE_AUTHOR);
             int dateIndex = cursor.getColumnIndex(ARTICLE_DATE);
             int imageUriIndex = cursor.getColumnIndex(ARTICLE_IMAGE_URI);
             int contentIndex = cursor.getColumnIndex(ARTICLE_CONTENT);
@@ -40,9 +38,7 @@ public class ArticleSQL {
 
                 Article article = new Article();
                 article.setArticleID(cursor.getInt(idIndex));
-                int authorid = cursor.getInt(authorIndex);
-                User author = UserSQL.getUser(db,authorid+"");
-                article.setAuthor(author);
+                article.setAuthor(cursor.getString(authorIndex));
                 article.setTitle(cursor.getString(titleIndex));
                 article.setDate(cursor.getString(dateIndex));
                 article.setImg(cursor.getString(imageUriIndex));
@@ -63,7 +59,7 @@ public class ArticleSQL {
         ContentValues values = new ContentValues();
         values.put(ARTICLE_ID, article.getArticleID());
         values.put(ARTICLE_TITLE, article.getTitle());
-        values.put(ARTICLE_AUTHOR_ID, article.getAuthor().getUserID());
+        values.put(ARTICLE_AUTHOR, article.getAuthor());
         values.put(ARTICLE_DATE, article.getDate());
         values.put(ARTICLE_IMAGE_URI, article.getImg());
         values.put(ARTICLE_CONTENT, article.getContent());
@@ -80,7 +76,7 @@ public class ArticleSQL {
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(ARTICLE_ID);
             int titleIndex = cursor.getColumnIndex(ARTICLE_TITLE);
-            int authorIndex = cursor.getColumnIndex(ARTICLE_AUTHOR_ID);
+            int authorIndex = cursor.getColumnIndex(ARTICLE_AUTHOR);
             int dateIndex = cursor.getColumnIndex(ARTICLE_DATE);
             int imageUriIndex = cursor.getColumnIndex(ARTICLE_IMAGE_URI);
             int contentIndex = cursor.getColumnIndex(ARTICLE_CONTENT);
@@ -93,9 +89,7 @@ public class ArticleSQL {
             article.setImg(cursor.getString(imageUriIndex));
             article.setContent(cursor.getString(contentIndex));
             article.setWasDeleted(cursor.getInt(wasDeletedIndex) == 1);
-            int authorid = cursor.getInt(authorIndex);
-            User author = UserSQL.getUser(db,authorid+"");
-            article.setAuthor(author);
+            article.setAuthor(cursor.getString(authorIndex));
         }
         return article;
     }
@@ -105,7 +99,7 @@ public class ArticleSQL {
         Log.d("edit", article.toString());
         values.put(ARTICLE_ID, article.getArticleID());
         values.put(ARTICLE_TITLE, article.getTitle());
-        values.put(ARTICLE_AUTHOR_ID, article.getAuthor().getUserID());
+        values.put(ARTICLE_AUTHOR, article.getAuthor());
         values.put(ARTICLE_DATE, article.getDate());
         values.put(ARTICLE_IMAGE_URI, article.getImg());
         values.put(ARTICLE_CONTENT, article.getContent());
@@ -118,7 +112,7 @@ public class ArticleSQL {
                 " (" +
                 ARTICLE_ID + " NUMBER PRIMARY KEY, " +
                 ARTICLE_TITLE + " TEXT, " +
-                ARTICLE_AUTHOR_ID + " NUMBER, " +
+                ARTICLE_AUTHOR + " TEXT, " +
                 ARTICLE_DATE + " TEXT, " +
                 ARTICLE_IMAGE_URI + " TEXT, " +
                 ARTICLE_CONTENT + " TEXT, " +

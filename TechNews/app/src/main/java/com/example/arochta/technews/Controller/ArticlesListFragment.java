@@ -143,7 +143,7 @@ public class ArticlesListFragment extends Fragment{
             Article article = data.get(newPos);
             //Article article = data.get(position);
             title.setText(article.getTitle());
-            author.setText(article.getAuthor().getName());
+            author.setText(article.getAuthor());
             Bitmap bitmap = Model.instace.loadImageFromFile(article.getImg());
             imageview.setImageBitmap(bitmap);
 

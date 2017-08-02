@@ -83,7 +83,7 @@ public class ArticleShowFragment extends Fragment {
         super.onStart();
         //TODO: set image
         title.setText(article.getTitle());
-        author.setText(article.getAuthor().getName());
+        author.setText(article.getAuthor());
         date.setText(article.getDate());
         Bitmap bitmap = Model.instace.loadImageFromFile(article.getImg());
         articleImg.setImageBitmap(bitmap);

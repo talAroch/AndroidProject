@@ -14,7 +14,7 @@ public class Article {
 
     private int articleID;
     private String title;
-    private User author;//CHANGE TO USER
+    private String author;//CHANGE TO USER
     private SimpleDateFormat sdf;
     private String date;
     private String imgURI;
@@ -58,11 +58,11 @@ public class Article {
         this.title = title;
     }
 
-    public User getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
@@ -94,7 +94,7 @@ public class Article {
     public String toString() {
         String str = "articleId: " +articleID +". \n"+
                 "title: " +title +". \n"+
-                "author: " +author.getUserID() +". \n"+
+                "author: " +author +". \n"+
                 "date: " +date +". \n"+
                 "image: " +imgURI +". \n"+
                 "content: " +content +". \n";

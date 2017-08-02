@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.Model.Model;
-import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
 
 import java.io.ByteArrayOutputStream;
@@ -38,7 +37,7 @@ public class NewArticleFragment extends Fragment {
 
     private int articleID;//CHANGE TO ARTICLE ID
 
-    User author;
+    String author;
 
     Article newArticle;
 
@@ -63,7 +62,7 @@ public class NewArticleFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static NewArticleFragment newInstance(User user) {
+    public static NewArticleFragment newInstance(String user) {
         NewArticleFragment fragment = new NewArticleFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1,user);
@@ -76,7 +75,7 @@ public class NewArticleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d("tag","on create");
         if (getArguments() != null) {
-            author = (User)getArguments().getSerializable(ARG_PARAM1);
+            author = getArguments().getString(ARG_PARAM1);
         }
 
         newArticle = new Article();

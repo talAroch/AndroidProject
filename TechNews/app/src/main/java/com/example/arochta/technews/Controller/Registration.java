@@ -9,14 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.Model.UserAuthentication;
 import com.example.arochta.technews.R;
 
 public class Registration extends Activity {
 
-    EditText name;
+    String userEmail;
+    String userPassword;
+
     EditText email;
     EditText password;
     EditText verifypass;
@@ -28,7 +29,6 @@ public class Registration extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        name = (EditText)findViewById(R.id.registerName);
         email = (EditText)findViewById(R.id.registerEmail);
         password = (EditText)findViewById(R.id.registerPassword);
         verifypass = (EditText)findViewById(R.id.registerVerifypass);
@@ -47,28 +47,27 @@ public class Registration extends Activity {
                 else if(isFieldEmpty(password))
                     registerToast("you have to put password");
                 else if(verifyPassword()) {
-                    User user = new User();
-                    user.setUserID(Model.instace.generateID());
-                    //user.setUserID(20);
-                    user.setName(name.getText().toString());
-                    user.setEmail(email.getText().toString());
-                    user.setPassword(password.getText().toString());
-                    Model.instace.addUser(user, new UserAuthentication.AccountCallBack() {
+                    userEmail = email.getText().toString();
+                    userPassword = password.getText().toString();
+                    Model.instace.addUser(userEmail,userPassword, new UserAuthentication.AccountCallBack() {
                         @Override
                         public void onComplete() {
                             registerToast("registration was successfull");
                             Intent intent = new Intent(getApplicationContext(), Login.class);
-                            intent.putExtra("uemail",user.getEmail());
+                            intent.putExtra("uemail",email.getText().toString());
                             startActivity(intent);
                             finish();
                         }
 
                         @Override
                         public void onFail() {
-                            registerToast("passwords don't match");
+                            registerToast("registration failed");
                         }
                     });
 
+                }
+                else{
+                    registerToast("password don't match");
                 }
             }
         });

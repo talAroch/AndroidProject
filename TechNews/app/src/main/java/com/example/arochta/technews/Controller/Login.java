@@ -13,10 +13,13 @@ import android.widget.Toast;
 import com.example.arochta.technews.Controller.MainActivity;
 
 import com.example.arochta.technews.Model.Model;
-import com.example.arochta.technews.Model.User;
+import com.example.arochta.technews.Model.UserAuthentication;
 import com.example.arochta.technews.R;
 
 public class Login extends Activity {
+
+    String userEmail;
+    String userPassword;
 
     EditText email;
     EditText password;
@@ -64,16 +67,22 @@ public class Login extends Activity {
                 else if(isFieldEmpty(password))
                     registerToast("you have to put password");
                 else {
-                    User user = Model.instace.isUserInSystem(email.getText().toString(),password.getText().toString());
-                    if(user != null){
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("currentUser",user);
-                        startActivity(intent);
-                        finish();
-                    }
-                    else{
-                        registerToast("wrong email or password");
-                    }
+                    userEmail = email.getText().toString();
+                    userPassword = password.getText().toString();
+                    Model.instace.isUserInSystem(userEmail, userPassword, new UserAuthentication.AccountCallBack() {
+                        @Override
+                        public void onComplete() {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.putExtra("currentUser",email.getText().toString());
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFail() {
+                            registerToast("wrong email or password");
+                        }
+                    });
 
                 }
             }

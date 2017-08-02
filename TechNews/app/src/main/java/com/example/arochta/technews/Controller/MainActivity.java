@@ -17,13 +17,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
-import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.R;
 
 
 public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener,EditArticleFragment.OnFragmentInteractionListener{
 
-    static User currentUser;
+    static String currentUser;
     static int currentArticleID = 0;
 
     ArticlesListFragment articleListFragment;
@@ -65,9 +64,8 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
         Intent intent = getIntent();
 
-        currentUser = (User)intent.getSerializableExtra("currentUser");
-        Log.d("user", currentUser.getUserID()+"");
-        setTitle("hello, "+ currentUser.getName());
+        currentUser = intent.getStringExtra("currentUser");
+        setTitle("hello, "+ currentUser);
 
         setContentView(R.layout.activity_main);
 

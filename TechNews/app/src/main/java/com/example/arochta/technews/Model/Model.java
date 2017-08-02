@@ -20,7 +20,6 @@ import java.util.Random;
 
 import com.example.arochta.technews.Controller.MainActivity;
 import com.example.arochta.technews.Model.Article;
-import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.MyApplication;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,7 +31,6 @@ public class Model {
 
     public final static Model instace = new Model();
 
-    private List<User> users = new LinkedList<User>();
     private List<Article> articles = new LinkedList<Article>();
     private static int id = 1;
 
@@ -40,29 +38,8 @@ public class Model {
     private ModelFirebase modelFirebase;
 
     private Model(){
-        /*User user = new User();
-        user.setName("tal");
-        user.setEmail("tal@tal.com");
-        user.setPassword("tal");
-        users.add(user);*/
         modelSql = new ModelSQL(MyApplication.getMyContext());
         modelFirebase = new ModelFirebase();
-
-        /*for (int i = 1; i < 6; i++) {
-            Article article = new Article();
-            article.setTitle("test"+i);
-            article.setAuthor(user);
-            String content1 = "";
-            for (int j = 0; j < 20; j++) {
-                content1 = content1 + "test"+i;
-            }
-            article.setContent(content1);
-            article.setArticleID(id);
-            articles.add(article);
-
-            id++;
-        }*/
-
     }
 
 
@@ -70,8 +47,8 @@ public class Model {
         return  ArticleSQL.getAllArticles(modelSql.getReadableDatabase());
     }
 
-    public void addUser(User user,final UserAuthentication.AccountCallBack callback){
-        modelFirebase.getUserAuthentication().signin(user.getEmail(),user.getPassword(),new UserAuthentication.AccountCallBack(){
+    public void addUser(String email,String password,final UserAuthentication.AccountCallBack callback){
+        modelFirebase.getUserAuthentication().createAccount(email,password,new UserAuthentication.AccountCallBack(){
             @Override
             public void onComplete () {
                 callback.onComplete();
@@ -82,12 +59,9 @@ public class Model {
                 callback.onFail();
             }
         });
-
-        modelFirebase.getUserAuthentication().updateUserProfile(user.getName());
     }
 
     public void addArticle(Article article){
-        //articles.add(article);
         ArticleSQL.addArticle(modelSql.getReadableDatabase(),article);
         id++;
     }
@@ -107,22 +81,9 @@ public class Model {
         return max;
     }
 
-    public User getUser(String userEmail) {
-        for (User user : users){
-            if (user.getEmail().equals(userEmail)){
-                return user;
-            }
-        }
-        return null;
 
-    }
-
-    public User getCurrentUser(){
-        User user = null;
-        FirebaseUser currentUser= modelFirebase.getUserAuthentication().getCurrentUser();
-        user.setName(currentUser.getDisplayName());
-        user.setEmail(currentUser.getEmail());
-        user.setUserID(currentUser.getUid());
+    public String getCurrentUserEmail(){
+        return modelFirebase.getUserAuthentication().getCurrentUser().getEmail();
     }
 
     public int generateID(){
@@ -135,14 +96,6 @@ public class Model {
         return ArticleSQL.getArticle(modelSql.getReadableDatabase(),id+"");
     }
 
-    public boolean isUserExist(String userEmail){
-        for (User s : users){
-            if (s.getEmail().equals(userEmail)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean isArticleExist(int id){
         for (Article article : articles){
@@ -160,19 +113,6 @@ public class Model {
             }
         }
         return false;
-    }
-
-    public void deleteUser(String userEmail) {
-        int index = 0;
-        for (User user : users){
-            if (user.getEmail().equals(userEmail)){
-                index = users.indexOf(user);
-            }
-        }
-        if(index<0) {
-            return;
-        }
-        users.remove(index);
     }
 
     public void deleteArticle(String title) {
@@ -231,14 +171,6 @@ public class Model {
                 });
     }
 
-    public boolean isUserInSystem(User user){
-        for (User s : users){
-            if (s.getEmail().equals(user.getEmail()) && s.getPassword().equals(user.getPassword())){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public interface GetImageListener{
         void onSuccess(Bitmap image);

@@ -22,12 +22,10 @@ public class ModelSQL extends SQLiteOpenHelper{
         @Override
         public void onCreate(SQLiteDatabase db) {
             ArticleSQL.onCreate(db);
-            UserSQL.onCreate(db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             ArticleSQL.onUpgrade(db, oldVersion, newVersion);
-            UserSQL.onUpgrade(db, oldVersion, newVersion);
         }
 }
