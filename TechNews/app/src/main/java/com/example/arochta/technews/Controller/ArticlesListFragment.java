@@ -62,6 +62,7 @@ public class ArticlesListFragment extends Fragment{
             }
         }
         if (!exist){
+            Log.d("list", event.article.toString());
             data.add(event.article);
         }
         adapter.notifyDataSetChanged();
@@ -199,23 +200,24 @@ public class ArticlesListFragment extends Fragment{
             final ImageView imageview = (ImageView)convertView.findViewById(R.id.article_row_image);
 
             //write the newest article first
-            int newPos = datasize - position-1;
-            Article article = data.get(newPos);
-            //Article article = data.get(position);
-            title.setText(article.getTitle());
-            author.setText(article.getAuthor());
-            Model.instace.getImage(article.getImg(), new Model.GetImageListener() {
-                @Override
-                public void onSuccess(Bitmap image) {
-                    imageview.setImageBitmap(image);
-                }
+            if(datasize != 0) {
+                int newPos = datasize - position - 1;
+                Article article = data.get(newPos);
+                //Article article = data.get(position);
+                title.setText(article.getTitle());
+                author.setText(article.getAuthor());
+                Model.instace.getImage(article.getImg(), new Model.GetImageListener() {
+                    @Override
+                    public void onSuccess(Bitmap image) {
+                        imageview.setImageBitmap(image);
+                    }
 
-                @Override
-                public void onFail() {
-                    Log.d("listImg","fail");
-                }
-            });
-
+                    @Override
+                    public void onFail() {
+                        Log.d("listImg", "fail");
+                    }
+                });
+            }
             return convertView;
         }
     }

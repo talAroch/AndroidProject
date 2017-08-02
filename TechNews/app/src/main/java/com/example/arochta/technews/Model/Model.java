@@ -45,6 +45,8 @@ public class Model {
     private Model(){
         modelSql = new ModelSQL(MyApplication.getMyContext());
         modelFirebase = new ModelFirebase();
+
+        synchArticlesDbAndregisterArticlesUpdates();
     }
 
 
@@ -178,11 +180,15 @@ public class Model {
     }
 
     public void saveImage(final Bitmap imageBmp, final String fileName, final SaveImageListener listener) {
+        if(imageBmp == null)
+            Log.d("nulls","bitmap null");
+        if(fileName == null)
+            Log.d("nulls","filename null");
         modelFirebase.articleFirebase.saveImage(imageBmp, fileName, new SaveImageListener() {
             @Override
             public void complete(String url) {
-                String fileName = URLUtil.guessFileName(url, null, null);
-                saveImageToFile(imageBmp,fileName);
+                String file_name = URLUtil.guessFileName(url, null, null);
+                saveImageToFile(imageBmp,file_name);
                 listener.complete(url);
             }
 
@@ -258,7 +264,7 @@ public class Model {
     private void synchArticlesDbAndregisterArticlesUpdates() {
         //1. get local lastUpdateTade
         SharedPreferences pref = MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
-        final double lastUpdateDate = pref.getFloat("StudnetsLastUpdateDate",0);
+        final double lastUpdateDate = pref.getFloat("ArticlesLastUpdateDate",0);
         Log.d("TAG","lastUpdateDate: " + lastUpdateDate);
 
         modelFirebase.articleFirebase.registerArticlesUpdates(lastUpdateDate,new ArticleFirebase.RegisterArticlesUpdatesCallback() {
@@ -272,9 +278,9 @@ public class Model {
                 if (lastUpdateDate < article.getLastUpdateDate()){
                     SharedPreferences.Editor prefEd = MyApplication.getMyContext().getSharedPreferences("TAG",
                             Context.MODE_PRIVATE).edit();
-                    prefEd.putFloat("StudnetsLastUpdateDate", (float) article.getLastUpdateDate());
+                    prefEd.putFloat("ArticlesLastUpdateDate", (float) article.getLastUpdateDate());
                     prefEd.commit();
-                    Log.d("TAG","StudnetsLastUpdateDate: " + article.getLastUpdateDate());
+                    Log.d("TAG","ArticlesLastUpdateDate: " + article.getLastUpdateDate());
                 }
 
                 EventBus.getDefault().post(new UpdateArticleEvent(article));

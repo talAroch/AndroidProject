@@ -104,20 +104,22 @@ public class NewArticleFragment extends Fragment {
                 Log.d("new",fileName);
                 if(imageBitmap != null)
                     Log.d("new", "is not null");
-                Model.instace.saveImage(imageBitmap, fileName, new Model.SaveImageListener() {
-                    @Override
-                    public void complete(String url) {
-                        newArticle.setImg(url);
-                        Model.instace.addArticle(newArticle);
-                        DialogFragment df = new ArticleSaveDialog();
-                        df.show(getFragmentManager(),"tag");
-                    }
+                if(imageBitmap != null && fileName != null) {
+                    Model.instace.saveImage(imageBitmap, fileName, new Model.SaveImageListener() {
+                        @Override
+                        public void complete(String url) {
+                            newArticle.setImg(url);
+                            Model.instace.addArticle(newArticle);
+                            //DialogFragment df = new ArticleSaveDialog();
+                            //df.show(getFragmentManager(), "tag");
+                        }
 
-                    @Override
-                    public void fail() {
-                        newArticle.setImg("");
-                    }
-                });
+                        @Override
+                        public void fail() {
+                            newArticle.setImg("");
+                        }
+                    });
+                }
                 onButtonPressed();
             }
         });

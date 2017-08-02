@@ -19,5 +19,6 @@ public class ModelFirebase {
 
     public ModelFirebase(){
         userAuthentication = new UserAuthentication();
+        articleFirebase = new ArticleFirebase();
     }
 }
