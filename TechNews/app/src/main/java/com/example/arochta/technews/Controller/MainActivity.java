@@ -134,7 +134,8 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         //verify the user;
         if(Model.instace.isAuthor(id))
             setMenuIcons(false,false,true);
-        setMenuIcons(false,false,false);
+        else
+            setMenuIcons(false,false,false);
         articleShowFragment = articleShowFragment.newInstance(id);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
@@ -160,14 +161,18 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
             fragmentTransaction.commit();
+            setMenuIcons(true,true,false);
         }
         else{
-            articleShowFragment = articleShowFragment.newInstance(articleID);
+            //articleShowFragment = articleShowFragment.newInstance(articleID);
+            setMenuIcons(true,true,false);
+            //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            //fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
+            //fragmentTransaction.commit();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
+            fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
             fragmentTransaction.commit();
         }
-        setMenuIcons(true,true,false);
     }
 
     @Override

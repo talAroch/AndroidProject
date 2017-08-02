@@ -65,6 +65,19 @@ public class ArticlesListFragment extends Fragment{
             Log.d("list", event.article.toString());
             data.add(event.article);
         }
+        Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
+            @Override
+            public void onComplete(List<Article> list) {
+                data.clear();
+                data = list;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
         adapter.notifyDataSetChanged();
         list.setSelection(adapter.getCount() - 1);
     }
@@ -89,7 +102,7 @@ public class ArticlesListFragment extends Fragment{
                 data = null;
             }
         });*/
-        datasize = data.size();
+        //datasize = data.size();
         //data = swapData(Model.instace.getAllArticles());
     }
 
@@ -123,6 +136,7 @@ public class ArticlesListFragment extends Fragment{
         Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
             @Override
             public void onComplete(List<Article> list) {
+                data.clear();
                 data = list;
                 adapter.notifyDataSetChanged();
             }
@@ -199,11 +213,11 @@ public class ArticlesListFragment extends Fragment{
             TextView author = (TextView) convertView.findViewById(R.id.article_row_author);
             final ImageView imageview = (ImageView)convertView.findViewById(R.id.article_row_image);
 
-            //write the newest article first
+            datasize = data.size();
             if(datasize != 0) {
                 int newPos = datasize - position - 1;
                 Article article = data.get(newPos);
-                //Article article = data.get(position);
+                Log.d("newlist", article.toString());
                 title.setText(article.getTitle());
                 author.setText(article.getAuthor());
                 Model.instace.getImage(article.getImg(), new Model.GetImageListener() {

@@ -94,6 +94,7 @@ public class EditArticleFragment extends Fragment {
             @Override
             public void onSuccess(Bitmap image) {
                 imageBitmap = image;
+                imageView.setImageBitmap(imageBitmap);
             }
 
             @Override
@@ -111,7 +112,7 @@ public class EditArticleFragment extends Fragment {
 
         title.setText(article.getTitle());
         Log.d("model", "load " + article.getImg());
-        imageView.setImageBitmap(imageBitmap);
+        //imageView.setImageBitmap(imageBitmap);
         content.setText(article.getContent());
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +126,8 @@ public class EditArticleFragment extends Fragment {
                 public void complete(String url) {
                     article.setImg(url);
                     Model.instace.editArticle(article);
-                    DialogFragment df = new ArticleSaveDialog();
-                    df.show(getFragmentManager(),"tag");
+                    //DialogFragment df = new ArticleSaveDialog();
+                    //df.show(getFragmentManager(),"tag");
                 }
 
                 @Override

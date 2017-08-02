@@ -106,6 +106,7 @@ public class Model {
 
     public Article getArticle(int id) {
         return ArticleSQL.getArticle(modelSql.getReadableDatabase(),id+"");
+
     }
 
 
@@ -157,6 +158,7 @@ public class Model {
     }
 
     public void editArticle(Article article){
+        ArticleSQL.editArticle(modelSql.getReadableDatabase(),article);
         modelFirebase.articleFirebase.editArticle(article);
     }
 
@@ -271,7 +273,10 @@ public class Model {
             @Override
             public void onArticleUpdate(Article article) {
                 //3. update the local db
-                ArticleSQL.addArticle(modelSql.getWritableDatabase(),article);
+                if(ArticleSQL.getArticle(modelSql.getReadableDatabase(),article.getArticleID()+"") != null)
+                    ArticleSQL.editArticle(modelSql.getWritableDatabase(),article);
+                else
+                    ArticleSQL.addArticle(modelSql.getWritableDatabase(),article);
                 //4. update the lastUpdateTade
                 SharedPreferences pref = MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
                 final double lastUpdateDate = pref.getFloat("ArticlesLastUpdateDate",0);

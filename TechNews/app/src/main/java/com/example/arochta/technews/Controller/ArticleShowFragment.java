@@ -16,10 +16,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class ArticleShowFragment extends Fragment {
@@ -53,6 +57,7 @@ public class ArticleShowFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +66,6 @@ public class ArticleShowFragment extends Fragment {
             article = Model.instace.getArticle(articleID);
         }
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
