@@ -48,7 +48,7 @@ public class Model {
     }
 
     public void addUser(String email,String password,final UserAuthentication.AccountCallBack callback){
-        modelFirebase.getUserAuthentication().createAccount(email,password,new UserAuthentication.AccountCallBack(){
+        modelFirebase.userAuthentication.createAccount(email,password,new UserAuthentication.AccountCallBack(){
             @Override
             public void onComplete () {
                 callback.onComplete();
@@ -83,7 +83,7 @@ public class Model {
 
 
     public String getCurrentUserEmail(){
-        return modelFirebase.getUserAuthentication().getCurrentUser().getEmail();
+        return modelFirebase.userAuthentication.getCurrentUser().getEmail();
     }
 
     public int generateID(){
@@ -158,7 +158,7 @@ public class Model {
 
 
     public void isUserInSystem(String userEmail,String userPassword,final UserAuthentication.AccountCallBack callback){
-        modelFirebase.getUserAuthentication().signin(userEmail,userPassword,new UserAuthentication.AccountCallBack(){
+        modelFirebase.userAuthentication.signin(userEmail,userPassword,new UserAuthentication.AccountCallBack(){
                         @Override
                         public void onComplete () {
                             callback.onComplete();

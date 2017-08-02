@@ -15,12 +15,9 @@ import java.util.List;
 
 public class ModelFirebase {
     public UserAuthentication userAuthentication;
+    public ArticleFirebase articleFirebase;
 
     public ModelFirebase(){
         userAuthentication = new UserAuthentication();
-    }
-
-    public UserAuthentication getUserAuthentication() {
-        return userAuthentication;
     }
 }

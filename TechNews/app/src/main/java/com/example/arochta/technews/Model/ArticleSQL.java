@@ -13,14 +13,14 @@ import java.util.List;
  */
 
 public class ArticleSQL {
-    static final String ARTICLE_TABLE = "articles";
-    static final String ARTICLE_ID = "articleID";
-    static final String ARTICLE_TITLE = "title";
-    static final String ARTICLE_AUTHOR = "author";
-    static final String ARTICLE_DATE = "date";
-    static final String ARTICLE_IMAGE_URI = "imageuri";
-    static final String ARTICLE_CONTENT = "content";
-    static final String ARTICLE_WAS_DELETED = "wasDeleted";
+    public static final String ARTICLE_TABLE = "articles";
+    public static final String ARTICLE_ID = "articleID";
+    public static final String ARTICLE_TITLE = "title";
+    public static final String ARTICLE_AUTHOR = "author";
+    public static final String ARTICLE_DATE = "date";
+    public static final String ARTICLE_IMAGE_URI = "imageuri";
+    public static final String ARTICLE_CONTENT = "content";
+    public static final String ARTICLE_WAS_DELETED = "wasDeleted";
 
     static List<Article> getAllArticles(SQLiteDatabase db) {
         Cursor cursor = db.query(ARTICLE_TABLE , null, null, null, null, null, null);
