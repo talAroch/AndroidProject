@@ -22,6 +22,9 @@ public class Article {
     private boolean wasDeleted;//logical deletion
 
 
+
+    private double lastUpdateDate;
+
     public Article(){
         articleID = 0;
         title = "";
@@ -33,6 +36,13 @@ public class Article {
         wasDeleted = false;
     }
 
+    public double getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(double lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
 
     public boolean isWasDeleted() {
         return wasDeleted;

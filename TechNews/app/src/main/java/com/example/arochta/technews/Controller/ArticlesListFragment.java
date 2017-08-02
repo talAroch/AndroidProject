@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.arochta.technews.Model.Article;
+import com.example.arochta.technews.Model.ArticleFirebase;
 import com.example.arochta.technews.R;
 
 import com.example.arochta.technews.Model.Model;
@@ -49,7 +50,17 @@ public class ArticlesListFragment extends Fragment{
         if (getArguments() != null) {
         }
         //TODO:get from DB
-        data = Model.instace.getAllArticles();
+        Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
+            @Override
+            public void onComplete(List<Article> list) {
+                data = list;
+            }
+
+            @Override
+            public void onCancel() {
+                data = null;
+            }
+        });
         datasize = data.size();
         //data = swapData(Model.instace.getAllArticles());
     }
@@ -136,7 +147,7 @@ public class ArticlesListFragment extends Fragment{
 
             TextView title = (TextView) convertView.findViewById(R.id.article_row_name);
             TextView author = (TextView) convertView.findViewById(R.id.article_row_author);
-            ImageView imageview = (ImageView)convertView.findViewById(R.id.article_row_image);
+            final ImageView imageview = (ImageView)convertView.findViewById(R.id.article_row_image);
 
             //write the newest article first
             int newPos = datasize - position-1;
@@ -144,8 +155,17 @@ public class ArticlesListFragment extends Fragment{
             //Article article = data.get(position);
             title.setText(article.getTitle());
             author.setText(article.getAuthor());
-            Bitmap bitmap = Model.instace.loadImageFromFile(article.getImg());
-            imageview.setImageBitmap(bitmap);
+            Model.instace.getImage(article.getImg(), new Model.GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap image) {
+                    imageview.setImageBitmap(image);
+                }
+
+                @Override
+                public void onFail() {
+                    Log.d("listImg","fail");
+                }
+            });
 
             return convertView;
         }

@@ -1,11 +1,14 @@
 package com.example.arochta.technews.Model;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +25,8 @@ import com.example.arochta.technews.Controller.MainActivity;
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.MyApplication;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by arochta on 17/07/2017.
@@ -43,8 +48,12 @@ public class Model {
     }
 
 
-    public List<Article> getAllArticles(){
-        return  ArticleSQL.getAllArticles(modelSql.getReadableDatabase());
+    public void getAllArticles(final ArticleFirebase.GetAllArticlesAndObserveCallback callback){
+        // read from local db
+        List<Article> data = ArticleSQL.getAllArticles(modelSql.getReadableDatabase());
+
+        //return list of students
+        callback.onComplete(data);
     }
 
     public void addUser(String email,String password,final UserAuthentication.AccountCallBack callback){
@@ -62,14 +71,15 @@ public class Model {
     }
 
     public void addArticle(Article article){
-        ArticleSQL.addArticle(modelSql.getReadableDatabase(),article);
-        id++;
+        modelFirebase.articleFirebase.addArticle(article);
+        //ArticleSQL.addArticle(modelSql.getReadableDatabase(),article);
     }
 
-    public void editArticle(Article article){
-        Log.d("edit", "3");
-        ArticleSQL.editArticle(modelSql.getReadableDatabase(),article);
-    }
+
+     //public void editArticle(Article article){
+     //   Log.d("edit", "3");
+     //   ArticleSQL.editArticle(modelSql.getReadableDatabase(),article);
+    //}
 
     public int getHighestArticleID(){
         int max = 0;
@@ -115,44 +125,9 @@ public class Model {
         return false;
     }
 
-    public void deleteArticle(String title) {
-        int index = 0;
-        for (Article article : articles){
-            if (article.getArticleID() == id){
-                index = articles.indexOf(article);
-            }
-        }
-        if(index<0) {
-            return;
-        }
-        articles.remove(index);
-    }
 
-    public void deleteArticle(Article ar) {
-        int index = 0;
-        for (Article article : articles){
-            if (article.equals(ar)){
-                index = articles.indexOf(article);
-                break;
-            }
-        }
-        if(index<0) {
-            return;
-        }
-        articles.remove(index);
-    }
-
-    public void deleteArticle(int id) {
-        int index = 0;
-        for (Article article : articles){
-            if (article.getArticleID() == id){
-                index = articles.indexOf(article);
-            }
-        }
-        if(index<0) {
-            return;
-        }
-        articles.remove(index);
+    public void deleteArticle(Article article) {
+        modelFirebase.articleFirebase.removeArticle(article);
     }
 
 
@@ -171,10 +146,24 @@ public class Model {
                 });
     }
 
+    public boolean isAdmin(){
+        return (modelFirebase.userAuthentication.getCurrentUser().getEmail().compareTo("tal@tal.com") == 0);
+    }
 
-    public interface GetImageListener{
-        void onSuccess(Bitmap image);
-        void onFail();
+    public void signOut(){
+        modelFirebase.userAuthentication.signOut();
+    }
+
+    public void editArticle(Article article){
+        modelFirebase.articleFirebase.editArticle(article);
+    }
+
+    //////////////////////////
+    //////////////////////////
+    //////////////////////////
+
+    public void saveImageToFile(Bitmap imageBitmap, String imageFileName){
+        ModelFiles.saveImageToFile(imageBitmap,imageFileName);
     }
 
     public interface SaveImageListener {
@@ -182,46 +171,59 @@ public class Model {
         void fail();
     }
 
-    public void saveImageToFile(Bitmap imageBitmap, String imageFileName){
-        try {
-            File dir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            File imageFile = new File(dir,imageFileName);
-            try {
-                imageFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void saveImage(final Bitmap imageBmp, final String name, final SaveImageListener listener) {
+        modelFirebase.articleFirebase.saveImage(imageBmp, name, new SaveImageListener() {
+            @Override
+            public void complete(String url) {
+                String fileName = URLUtil.guessFileName(url, null, null);
+                saveImageToFile(imageBmp,fileName);
+                listener.complete(url);
             }
 
-            OutputStream out = new FileOutputStream(imageFile);
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.close();
+            @Override
+            public void fail() {
+                listener.fail();
+            }
+        });
 
-            //addPicureToGallery(imageFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
-    public Bitmap loadImageFromFile(String imageFileName){
-        Bitmap bitmap = null;
-        try {
-            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File imageFile = new File(dir,imageFileName);
-            InputStream inputStream = new FileInputStream(imageFile);
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            Log.d("tag","got image from cache: " + imageFileName);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
+
+    public interface GetImageListener{
+        void onSuccess(Bitmap image);
+        void onFail();
+    }
+
+    public void getImage(final String url, final GetImageListener listener) {
+        //check if image exsist localy
+        final String fileName = URLUtil.guessFileName(url, null, null);
+        ModelFiles.loadImageFromFileAsynch(fileName, new ModelFiles.LoadImageFromFileAsynch() {
+            @Override
+            public void onComplete(Bitmap bitmap) {
+                if (bitmap != null){
+                    Log.d("TAG","getImage from local success " + fileName);
+                    listener.onSuccess(bitmap);
+                }else {
+                    modelFirebase.articleFirebase.getImage(url, new GetImageListener() {
+                        @Override
+                        public void onSuccess(Bitmap image) {
+                            String fileName = URLUtil.guessFileName(url, null, null);
+                            Log.d("TAG","getImage from FB success " + fileName);
+                            saveImageToFile(image,fileName);
+                            listener.onSuccess(image);
+                        }
+
+                        @Override
+                        public void onFail() {
+                            Log.d("TAG","getImage from FB fail ");
+                            listener.onFail();
+                        }
+                    });
+
+                }
+            }
+        });
     }
 
     private void addPicureToGallery(File imageFile){
@@ -232,5 +234,50 @@ public class Model {
         mediaScanIntent.setData(contentUri);
         MainActivity.getContextOfApplication().sendBroadcast(mediaScanIntent);
     }
+
+    ////////////////
+    /////////////////
+    /// ///////////////
+
+
+    public class UpdateArticleEvent {
+        public final Article article;
+        public UpdateArticleEvent(Article article) {
+            this.article = article;
+        }
+    }
+
+
+
+    private void synchArticlesDbAndregisterArticlesUpdates() {
+        //1. get local lastUpdateTade
+        SharedPreferences pref = MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        final double lastUpdateDate = pref.getFloat("StudnetsLastUpdateDate",0);
+        Log.d("TAG","lastUpdateDate: " + lastUpdateDate);
+
+        modelFirebase.articleFirebase.registerArticlesUpdates(lastUpdateDate,new ArticleFirebase.RegisterArticlesUpdatesCallback() {
+            @Override
+            public void onArticleUpdate(Article article) {
+                //3. update the local db
+                ArticleSQL.addArticle(modelSql.getWritableDatabase(),article);
+                //4. update the lastUpdateTade
+                SharedPreferences pref = MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+                final double lastUpdateDate = pref.getFloat("ArticlesLastUpdateDate",0);
+                if (lastUpdateDate < article.getLastUpdateDate()){
+                    SharedPreferences.Editor prefEd = MyApplication.getMyContext().getSharedPreferences("TAG",
+                            Context.MODE_PRIVATE).edit();
+                    prefEd.putFloat("StudnetsLastUpdateDate", (float) article.getLastUpdateDate());
+                    prefEd.commit();
+                    Log.d("TAG","StudnetsLastUpdateDate: " + article.getLastUpdateDate());
+                }
+
+                EventBus.getDefault().post(new UpdateArticleEvent(article));
+            }
+        });
+    }
+
+
+
+
 
 }
