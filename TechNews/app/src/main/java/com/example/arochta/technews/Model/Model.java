@@ -22,6 +22,7 @@ import com.example.arochta.technews.Controller.MainActivity;
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.MyApplication;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by arochta on 17/07/2017.
@@ -36,14 +37,16 @@ public class Model {
     private static int id = 1;
 
     private ModelSQL modelSql;
+    private ModelFirebase modelFirebase;
 
     private Model(){
-        User user = new User();
+        /*User user = new User();
         user.setName("tal");
         user.setEmail("tal@tal.com");
         user.setPassword("tal");
-        users.add(user);
+        users.add(user);*/
         modelSql = new ModelSQL(MyApplication.getMyContext());
+        modelFirebase = new ModelFirebase();
 
         /*for (int i = 1; i < 6; i++) {
             Article article = new Article();
@@ -67,8 +70,20 @@ public class Model {
         return  ArticleSQL.getAllArticles(modelSql.getReadableDatabase());
     }
 
-    public void addUser(User user){
-        UserSQL.addUser(modelSql.getReadableDatabase(),user);
+    public void addUser(User user,final UserAuthentication.AccountCallBack callback){
+        modelFirebase.getUserAuthentication().signin(user.getEmail(),user.getPassword(),new UserAuthentication.AccountCallBack(){
+            @Override
+            public void onComplete () {
+                callback.onComplete();
+            }
+
+            @Override
+            public void onFail () {
+                callback.onFail();
+            }
+        });
+
+        modelFirebase.getUserAuthentication().updateUserProfile(user.getName());
     }
 
     public void addArticle(Article article){
@@ -100,6 +115,14 @@ public class Model {
         }
         return null;
 
+    }
+
+    public User getCurrentUser(){
+        User user = null;
+        FirebaseUser currentUser= modelFirebase.getUserAuthentication().getCurrentUser();
+        user.setName(currentUser.getDisplayName());
+        user.setEmail(currentUser.getEmail());
+        user.setUserID(currentUser.getUid());
     }
 
     public int generateID(){
@@ -194,14 +217,18 @@ public class Model {
 
 
 
-    public User isUserInSystem(String userEmail,String userPassword){
-        User user = new User();
-        user.setUserID(20);
-        user.setName("idan");
-        user.setEmail("idan@idan.com");
-        user.setPassword("1");
-        return user;
-        //UserSQL.validateUser(modelSql.getReadableDatabase(),userEmail,userPassword);
+    public void isUserInSystem(String userEmail,String userPassword,final UserAuthentication.AccountCallBack callback){
+        modelFirebase.getUserAuthentication().signin(userEmail,userPassword,new UserAuthentication.AccountCallBack(){
+                        @Override
+                        public void onComplete () {
+                            callback.onComplete();
+                        }
+
+                        @Override
+                        public void onFail () {
+                            callback.onFail();
+                        }
+                });
     }
 
     public boolean isUserInSystem(User user){

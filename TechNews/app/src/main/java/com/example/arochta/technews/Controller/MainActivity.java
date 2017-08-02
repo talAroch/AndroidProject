@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     EditArticleFragment editArticleFragment;
 
     //MyProgressBar progressBar;
-    ProgressDialog progressBar;
+    //ProgressDialog progressBar;
 
     private Menu our_menu;
     //menu.getItem(0) - add article
@@ -52,14 +52,16 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
         contextOfApplication = getApplicationContext();
 
-        progressBar = new ProgressDialog(MainActivity.this);
+        /*progressBar = new ProgressDialog(MainActivity.this);
         progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressBar.setIndeterminate(true);
         progressBar.setCanceledOnTouchOutside(false);
         progressBar.setTitle("Loading");
         progressBar.setMessage("please wait...");
         progressBar.show();
-        progressBar.dismiss();
+        progressBar.dismiss();*/
+
+        //progressBar = new MyProgressBar(getBaseContext());
 
         Intent intent = getIntent();
 
@@ -111,7 +113,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
                 //progressBar.setDialogMessage("disconnecting");
                 //progressBar.showDialog();
                 //Log.d("pb", "4");
-                progressBar.show(MainActivity.this,"disconnecting","");
+                //progressBar.setDialogMessage("disconnecting");
                 Log.d("pb", "after show");
                 setMenuIcons(false,false,false);
                 Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -119,7 +121,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
                 //Log.d("pb", "5");
                 //progressBar.dismissDialog();
                 //Log.d("pb", "6");
-                progressBar.dismiss();
+                //progressBar.dismissDialog();
                 finish();
                 break;
             case R.id.menu_edit_btn:

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.arochta.technews.Model.User;
 import com.example.arochta.technews.Model.Model;
+import com.example.arochta.technews.Model.UserAuthentication;
 import com.example.arochta.technews.R;
 
 public class Registration extends Activity {
@@ -52,15 +53,22 @@ public class Registration extends Activity {
                     user.setName(name.getText().toString());
                     user.setEmail(email.getText().toString());
                     user.setPassword(password.getText().toString());
-                    Model.instace.addUser(user);
-                    registerToast("registration was successfull");
-                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                    intent.putExtra("uemail",user.getEmail());
-                    startActivity(intent);
-                    finish();
-                }
-                else{
-                    registerToast("passwords don't match");
+                    Model.instace.addUser(user, new UserAuthentication.AccountCallBack() {
+                        @Override
+                        public void onComplete() {
+                            registerToast("registration was successfull");
+                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                            intent.putExtra("uemail",user.getEmail());
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFail() {
+                            registerToast("passwords don't match");
+                        }
+                    });
+
                 }
             }
         });
