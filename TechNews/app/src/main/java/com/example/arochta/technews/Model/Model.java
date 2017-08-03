@@ -99,9 +99,13 @@ public class Model {
     }
 
     public int generateID(){
-        Random rand = new Random();
-        int  n = rand.nextInt(Integer.MAX_VALUE) + 1;
-        return n;
+        int number;
+        do{
+            Random rand = new Random();
+            number = rand.nextInt(Integer.MAX_VALUE) + 1;
+
+        }while(getArticle(number) != null);
+        return number;
     }
 
     public Article getArticle(int id) {
