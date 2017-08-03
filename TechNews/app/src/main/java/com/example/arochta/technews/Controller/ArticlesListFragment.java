@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.LinkedList;
 import java.util.List;
 /**
+ * This class is manage the list of all articles.
  * Created by arochta on 17/07/2017.
  */
 
@@ -38,21 +39,10 @@ public class ArticlesListFragment extends Fragment{
     List<Article> data;
     int datasize = 0;
     ArticlesListAdapter adapter;
-
     private OnFragmentInteractionListener mListener;
-
-    public ArticlesListFragment() {
-        // Required empty public constructor
-    }
-
-    public static ArticlesListFragment newInstance() {
-        ArticlesListFragment fragment = new ArticlesListFragment();
-        return fragment;
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Model.UpdateArticleEvent event) {
-        Toast.makeText(getActivity(), "got new article event", Toast.LENGTH_SHORT).show();
         boolean exist = false;
         for (Article article: data){
             if (article.getArticleID() == (event.article.getArticleID())){
@@ -65,23 +55,10 @@ public class ArticlesListFragment extends Fragment{
             Log.d("list", event.article.toString());
             data.add(event.article);
         }
-        Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
-            @Override
-            public void onComplete(List<Article> list) {
-                data.clear();
-                data = list;
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        updateList();
         adapter.notifyDataSetChanged();
         list.setSelection(adapter.getCount() - 1);
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,46 +86,19 @@ public class ArticlesListFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_article_list, container, false);
-
-
         list = (ListView) contentView.findViewById(R.id.articlesList_list);
-
         adapter = new ArticlesListAdapter();
-
         list.setAdapter(adapter);
-
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int newPos = datasize - position-1;
-                //Log.d("newpos", "row item was clicked at position: " + newPos);
-                //adapter.notifyDataSetChanged();
-                //Intent intent = new Intent(StudentsListActivity.this,StudentDetailsActivity.class);
-                //intent.putExtra("StudentID",data.get(position).id);
                 onButtonPressed(data.get(newPos).getArticleID());
-                //Log.d("TAG","student id selected = " + data.get(position).id);
-                //finish();
-                //startActivityForResult(intent,REQUEST_ADD_ID);
-                //finish();
             }
         });
 
-        Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
-            @Override
-            public void onComplete(List<Article> list) {
-                data.clear();
-                data = list;
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-
+        updateList();
         EventBus.getDefault().register(this);
-
         return contentView;
     }
 
@@ -179,6 +129,25 @@ public class ArticlesListFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * Update the data in the articles' list
+     */
+    private void updateList() {
+        Model.instace.getAllArticles(new ArticleFirebase.GetAllArticlesAndObserveCallback() {
+            @Override
+            public void onComplete(List<Article> list) {
+                data.clear();
+                data = list;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     public interface OnFragmentInteractionListener {
@@ -235,15 +204,4 @@ public class ArticlesListFragment extends Fragment{
             return convertView;
         }
     }
-
-    /*public List<Article> swapData(List<Article> articles){
-        int datasize = articles.size();
-        for (int i = 0; i < (datasize/2); i++) {
-            Article temp = articles.get(i);
-            articles.set(i,articles.get(datasize-i-1));
-            articles.set(datasize-i-1,temp);
-        }
-        return articles;
-    }*/
-
 }

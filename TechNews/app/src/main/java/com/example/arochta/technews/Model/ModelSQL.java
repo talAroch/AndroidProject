@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * this class handles all the sql classes and the main sql DB
  * Created by tal on 02-Aug-17.
  */
 

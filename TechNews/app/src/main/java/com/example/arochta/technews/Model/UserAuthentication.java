@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 /**
+ * this class handles the users and users authentication using the firebase authentication
  * Created by arochta on 02/08/2017.
  */
 

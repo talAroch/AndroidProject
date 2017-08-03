@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * this class manage local image handling
  * Created by arochta on 02/08/2017.
  */
 
@@ -49,8 +50,8 @@ public class ModelFiles {
     interface LoadImageFromFileAsynch{
         void onComplete(Bitmap bitmap);
     }
-    static void loadImageFromFileAsynch(String imageFileName,
-                                        final LoadImageFromFileAsynch callback) {
+
+    static void loadImageFromFileAsynch(String imageFileName, final LoadImageFromFileAsynch callback) {
         AsyncTask<String,String,Bitmap> task = new AsyncTask<String,String,Bitmap>(){
             @Override
             protected Bitmap doInBackground(String... params) {
@@ -65,7 +66,6 @@ public class ModelFiles {
         };
         task.execute(imageFileName);
     }
-
 
     private static Bitmap loadImageFromFile(String imageFileName){
         Bitmap bitmap = null;

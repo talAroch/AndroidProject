@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * this class manage the article SQL-DB
  * Created by tal on 01-Aug-17.
  */
 
@@ -46,10 +47,8 @@ public class ArticleSQL {
                 article.setContent(cursor.getString(contentIndex));
                 article.setWasDeleted(cursor.getInt(wasDeletedIndex) == 1);
                 article.setLastUpdateDate(cursor.getDouble(lastUpdateIndex));
-                //article.setAuthor();
                 if (!article.isWasDeleted()){
                     list.add(article);
-                    //Log.d("all", article.toString());
                 }
             } while (cursor.moveToNext());
         }
@@ -66,7 +65,6 @@ public class ArticleSQL {
         values.put(ARTICLE_CONTENT, article.getContent());
         values.put(ARTICLE_LAST_UPDATE, article.getLastUpdateDate());
         values.put(ARTICLE_WAS_DELETED, article.isWasDeleted() == true);
-        Log.d("add", article.toString());
         db.insert(ARTICLE_TABLE, ARTICLE_ID, values);
     }
 
@@ -112,9 +110,8 @@ public class ArticleSQL {
         db.update(ARTICLE_TABLE,values, ARTICLE_ID+"="+article.getArticleID(), null);
     }
 
-    //donot touch pen tipagatcj
     //its been a while - crocodile
-    //drink pepsi be fucking sexy
+    //drink pepsi be sexy
 
     static public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + ARTICLE_TABLE +

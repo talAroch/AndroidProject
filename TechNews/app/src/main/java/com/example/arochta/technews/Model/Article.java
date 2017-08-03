@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * this class contains and manage the articl data fields
  * Created by arochta on 17/07/2017.
  */
 
@@ -14,15 +15,12 @@ public class Article {
 
     private int articleID;
     private String title;
-    private String author;//CHANGE TO USER
+    private String author;
     private SimpleDateFormat sdf;
     private String date;
     private String imgURI;
     private String content;
     private boolean wasDeleted;//logical deletion
-
-
-
     private double lastUpdateDate;
 
     public Article(){

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
@@ -15,57 +14,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.R;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.View.GONE;
 
+/**
+ * This class is handle to write of a new article and it's publish
+ */
 public class NewArticleFragment extends Fragment {
-    private static final String ARG_PARAM1 = "ArticleID";//CHANGE TO ARTICLE ID
-
-    private int articleID;//CHANGE TO ARTICLE ID
+    private static final String ARG_PARAM1 = "ArticleID";
 
     String author;
-
     Article newArticle;
-
     Bitmap imageBitmap;
-
-    //ProgressBar progressBar;
-
     EditText title;
-    //EditText author;
     EditText content;
-
     ImageView imageView;
-
-    Button saveBtn;
-    Button cancelBtn;
-
     MyProgressBar progressBar = MainActivity.getProgressBar();
-
     Context applicationContext = MainActivity.getContextOfApplication();
-
     FragmentManager fm;
 
     private OnFragmentInteractionListener mListener;
-
-    public NewArticleFragment() {
-        // Required empty public constructor
-    }
 
     public static NewArticleFragment newInstance(String user) {
         NewArticleFragment fragment = new NewArticleFragment();
@@ -93,7 +71,6 @@ public class NewArticleFragment extends Fragment {
         View contentView = inflater.inflate(R.layout.fragment_new_article, container, false);
 
         title = (EditText) contentView.findViewById(R.id.new_article_title);
-        //author= (EditText) contentView.findViewById(R.id.new_article_author);
         content= (EditText) contentView.findViewById(R.id.new_article_content);
         imageView = (ImageView) contentView.findViewById(R.id.new_article_image);
 
@@ -195,14 +172,9 @@ public class NewArticleFragment extends Fragment {
     }
 
     public void getPicture(Bitmap bitmap){
-        //progressBar.setVisibility(GONE);
         imageBitmap = bitmap;
         if(bitmap != null)
             imageView.setImageBitmap(bitmap);
-    }
-
-    public void onBackPressed() {
-        getActivity().getFragmentManager().popBackStack();
     }
 
     public void onButtonPressed() {
@@ -228,13 +200,7 @@ public class NewArticleFragment extends Fragment {
         mListener = null;
     }
 
-    public void  passData(String op){
-        mListener.onFragmentInteractionNew();
-    }
-
-
     public interface OnFragmentInteractionListener {
         void onFragmentInteractionNew();
     }
-
 }

@@ -24,13 +24,16 @@ import java.util.List;
 import static com.example.arochta.technews.Model.ArticleSQL.*;
 
 /**
+ * this class manage the article table in the firebase db
  * Created by arochta on 02/08/2017.
  */
 
 public class ArticleFirebase {
 
+    /**
+     * update event listener
+     */
     List<ChildEventListener> listeners = new LinkedList<ChildEventListener>();
-
 
     public void addArticle(Article article){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -47,53 +50,9 @@ public class ArticleFirebase {
         addArticle(article);
     }
 
-    public interface GetArticleCallback {
-        void onComplete(Article article);
-        void onCancel();
-    }
-
-    public void getArticle(int articleID, final GetArticleCallback callback) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(ARTICLE_TABLE);
-        myRef.child(articleID+"").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Article article = dataSnapshot.getValue(Article.class);
-                callback.onComplete(article);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                callback.onCancel();
-            }
-        });
-    }
-
     public interface GetAllArticlesAndObserveCallback {
         void onComplete(List<Article> list);
         void onCancel();
-    }
-
-    public void getAllArticlesAndObserve(final GetAllArticlesAndObserveCallback callback) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(ARTICLE_TABLE);
-        ValueEventListener listener = myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Article> list = new LinkedList<Article>();
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    Article article = snap.getValue(Article.class);
-                    if(!article.isWasDeleted())
-                        list.add(article);
-                }
-                callback.onComplete(list);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                callback.onCancel();
-            }
-        });
     }
 
     public void saveImage(Bitmap imageBmp, String name, final Model.SaveImageListener listener){

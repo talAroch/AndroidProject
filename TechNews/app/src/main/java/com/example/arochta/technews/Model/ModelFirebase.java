@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * this class handles all the firebase's class
  * Created by arochta on 02/08/2017.
  */
 

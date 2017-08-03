@@ -1,47 +1,30 @@
 package com.example.arochta.technews.Controller;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 
-import com.example.arochta.technews.Model.Article;
 import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.R;
 
 
-public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,ArticleShowFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener,EditArticleFragment.OnFragmentInteractionListener{
+public class MainActivity extends Activity implements ArticlesListFragment.OnFragmentInteractionListener,NewArticleFragment.OnFragmentInteractionListener,EditArticleFragment.OnFragmentInteractionListener{
 
     static String currentUser;
     static int currentArticleID = 0;
-
     ArticlesListFragment articleListFragment;
     ArticleShowFragment articleShowFragment;
     NewArticleFragment newArticleFragment;
     EditArticleFragment editArticleFragment;
-
     static MyProgressBar progressBar;
-    //ProgressDialog progressBar;
-
     private Menu our_menu;
-    //menu.getItem(0) - add article
-    //menu.getItem(1) - disconnect
-    //menu.getItem(2) - edit article
-
     static Context contextOfApplication;
-
     public static Context getContextOfApplication()
     {
         return contextOfApplication;
@@ -50,16 +33,11 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         contextOfApplication = getApplicationContext();
-
         progressBar = new MyProgressBar(MainActivity.this);
-
         Intent intent = getIntent();
-
         currentUser = intent.getStringExtra("currentUser");
         setTitle("hello, "+ currentUser);
-
         setContentView(R.layout.activity_main);
 
         try{
@@ -69,9 +47,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         }
 
         FragmentManager fm = getFragmentManager();
-
         articleListFragment = new ArticlesListFragment();
-
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, articleListFragment);
         fragmentTransaction.commit();
@@ -122,8 +98,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     @Override
     public void onFragmentInteractionList(int id) {
         currentArticleID = id;
-        //verify the user;
-        if(Model.instace.isAuthor(id))
+        if(Model.instace.isAuthor(id) || Model.instace.isAdmin())
             setMenuIcons(false,false,true);
         else
             setMenuIcons(false,false,false);
@@ -131,11 +106,6 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
         fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onFragmentInteractionDetails(int id) {
-
     }
 
     @Override
@@ -155,11 +125,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
             setMenuIcons(true,true,false);
         }
         else{
-            //articleShowFragment = articleShowFragment.newInstance(articleID);
             setMenuIcons(true,true,false);
-            //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            //fragmentTransaction.replace(R.id.main_fragment_container, articleShowFragment);
-            //fragmentTransaction.commit();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);
             fragmentTransaction.commit();
@@ -168,7 +134,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
     @Override
     public void onBackPressed()
-    {//super.onBackPressed();
+    {
         setMenuIcons(true,true,false);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment_container, articleListFragment);

@@ -7,25 +7,14 @@ import android.content.Context;
 import android.util.Log;
 
 /**
+ * This class handles the process dialog and make a progress bar with a custom message.
  * Created by tal on 01-Aug-17.
  */
 
 public class MyProgressBar{
 
     ProgressDialog dialog;
-    Context context;
 
-
-    public MyProgressBar(){}
-
-    /*public MyProgressBar(Context context){
-        this.context = context;
-        dialog = new ProgressDialog(context);
-    }*/
-
-    //public void showDialog(){dialog.show(context, "loading", "please wait...");}
-
-    //public void dismissDialog(){dialog.dismiss();}
     public MyProgressBar(Context context){
         dialog = new ProgressDialog(context);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

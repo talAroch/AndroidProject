@@ -29,23 +29,23 @@ import com.google.firebase.auth.FirebaseUser;
 import org.greenrobot.eventbus.EventBus;
 
 /**
+ * This class is facade of all the model functionality
  * Created by arochta on 17/07/2017.
  */
 
 public class Model {
 
+    /**
+     * singleton model
+     */
     public final static Model instace = new Model();
-
     private List<Article> articles = new LinkedList<Article>();
-    private static int id = 1;
-
     private ModelSQL modelSql;
     private ModelFirebase modelFirebase;
 
     private Model(){
         modelSql = new ModelSQL(MyApplication.getMyContext());
         modelFirebase = new ModelFirebase();
-
         synchArticlesDbAndregisterArticlesUpdates();
     }
 
@@ -74,25 +74,7 @@ public class Model {
 
     public void addArticle(Article article){
         modelFirebase.articleFirebase.addArticle(article);
-        //ArticleSQL.addArticle(modelSql.getReadableDatabase(),article);
     }
-
-
-     //public void editArticle(Article article){
-     //   Log.d("edit", "3");
-     //   ArticleSQL.editArticle(modelSql.getReadableDatabase(),article);
-    //}
-
-    public int getHighestArticleID(){
-        int max = 0;
-        for (Article article : articles){
-            if (article.getArticleID() > max){
-                max = article.getArticleID();
-            }
-        }
-        return max;
-    }
-
 
     public String getCurrentUserEmail(){
         return modelFirebase.userAuthentication.getCurrentUser().getEmail();
@@ -113,31 +95,9 @@ public class Model {
 
     }
 
-
-    public boolean isArticleExist(int id){
-        for (Article article : articles){
-            if (article.getArticleID() == id){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isArticleTitleExist(String title){
-        for (Article article : articles){
-            if (article.getTitle().compareTo(title) == 0){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     public void deleteArticle(Article article) {
         modelFirebase.articleFirebase.removeArticle(article);
     }
-
-
 
     public void isUserInSystem(String userEmail,String userPassword,final UserAuthentication.AccountCallBack callback){
         modelFirebase.userAuthentication.signin(userEmail,userPassword,new UserAuthentication.AccountCallBack(){
@@ -172,10 +132,6 @@ public class Model {
         return (article.getAuthor().compareTo(currentEmail) == 0);
     }
 
-    //////////////////////////
-    //////////////////////////
-    //////////////////////////
-
     public void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         ModelFiles.saveImageToFile(imageBitmap,imageFileName);
     }
@@ -197,7 +153,6 @@ public class Model {
                 saveImageToFile(imageBmp,file_name);
                 listener.complete(url);
             }
-
             @Override
             public void fail() {
                 listener.fail();
@@ -206,7 +161,6 @@ public class Model {
 
 
     }
-
 
     public interface GetImageListener{
         void onSuccess(Bitmap image);
@@ -244,28 +198,12 @@ public class Model {
         });
     }
 
-    private void addPicureToGallery(File imageFile){
-        //add the picture to the gallery so we dont need to manage the cache size
-        Intent mediaScanIntent = new
-                Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(imageFile);
-        mediaScanIntent.setData(contentUri);
-        MainActivity.getContextOfApplication().sendBroadcast(mediaScanIntent);
-    }
-
-    ////////////////
-    /////////////////
-    /// ///////////////
-
-
     public class UpdateArticleEvent {
         public final Article article;
         public UpdateArticleEvent(Article article) {
             this.article = article;
         }
     }
-
-
 
     private void synchArticlesDbAndregisterArticlesUpdates() {
         //1. get local lastUpdateTade

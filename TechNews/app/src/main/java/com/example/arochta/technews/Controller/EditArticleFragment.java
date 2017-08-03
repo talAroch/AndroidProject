@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
@@ -14,12 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.arochta.technews.Model.Model;
 import com.example.arochta.technews.Model.Article;
@@ -30,35 +26,25 @@ import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 
-
+/**
+ * This Class is fragment that handle The edit of an article.
+ */
 public class EditArticleFragment extends Fragment {
     private static final String ARG_PARAM1 = "articleId";
 
-    // TODO: Rename and change types of parameters
     private int articleId;
-
+    private OnFragmentInteractionListener mListener;
     Article article;
-
     EditText title;
     EditText content;
-
     Bitmap imageBitmap;
     ImageView imageView;
     Context applicationContext = MainActivity.getContextOfApplication();
     MyProgressBar progressBar = MainActivity.getProgressBar();
-
     Button saveBtn;
     Button deleteBtn;
     Button cancelBtn;
-
     FragmentManager fm;
-
-    private OnFragmentInteractionListener mListener;
-
-    public EditArticleFragment() {
-        // Required empty public constructor
-    }
-
 
     public static EditArticleFragment newInstance(int param1) {
         EditArticleFragment fragment = new EditArticleFragment();
@@ -87,11 +73,9 @@ public class EditArticleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("tag","On Create View");
         View contentView = inflater.inflate(R.layout.fragment_edit_article, container, false);
-
         title = (EditText) contentView.findViewById(R.id.edit_article_title);
         content = (EditText) contentView.findViewById(R.id.edit_article_content);
         imageView = (ImageView) contentView.findViewById(R.id.edit_article_image);
-
         saveBtn = (Button) contentView.findViewById(R.id.editSaveBtn);
         deleteBtn = (Button) contentView.findViewById(R.id.editDeleteBtn);
         cancelBtn = (Button) contentView.findViewById(R.id.editCancelBtn);
@@ -115,7 +99,6 @@ public class EditArticleFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         title.setText(article.getTitle());
         Log.d("model", "load " + article.getImg());
         //imageView.setImageBitmap(imageBitmap);
@@ -227,7 +210,6 @@ public class EditArticleFragment extends Fragment {
         Log.d("model", "4");
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(int id) {
         if (mListener != null) {
             mListener.onFragmentInteractionEdit(id);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 /**
  * Created by arochta on 24/05/2017.
+ * This class handles the alert dialog of the fragments
  */
 
 public class ArticleSaveDialog extends DialogFragment {
