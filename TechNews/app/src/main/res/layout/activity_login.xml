@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:hint="Email"
-        android:text="tal@tal.com"
         android:layout_marginBottom="20dp"
         android:inputType="textEmailAddress"
         />
@@ -39,7 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:hint="Password"
-        android:text="taltal1234"
         android:layout_marginBottom="20dp"
         android:inputType="textPassword"
         />

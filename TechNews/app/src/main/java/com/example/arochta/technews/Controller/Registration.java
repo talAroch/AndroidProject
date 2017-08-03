@@ -57,11 +57,11 @@ public class Registration extends Activity {
                     progressBar.dismissDialog();
                     registerToast("you have to put password");
                 }
-                else if(isEmail(userEmail)){
+                else if(!isEmail(userEmail)){
                     progressBar.dismissDialog();
                     registerToast("not valid email");
                 }
-                else if(isPassStrong(userPassword)){
+                else if(!isPassStrong(userPassword)){
                     progressBar.dismissDialog();
                     registerToast("weak password,\n put at least 6 characters");
                 }
@@ -104,14 +104,10 @@ public class Registration extends Activity {
     }
 
     public boolean isEmail(String email){
-        int index1 = email.indexOf("@");
-        if(index1 >= 0){
-            email = email.substring(index1,email.length());
-            int index2 = email.indexOf(".");
-            if(index2 >=0 )
-                return true;
-        }
-        return false;
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
 
     public boolean isPassStrong(String password){
