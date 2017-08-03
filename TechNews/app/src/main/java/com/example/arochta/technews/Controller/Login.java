@@ -26,12 +26,16 @@ public class Login extends Activity {
 
     Button loginbtn;
 
+    MyProgressBar progressBar;
+
     TextView registrationLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        progressBar = new MyProgressBar(Login.this);
 
         Intent intent = getIntent();
         String userEmail = intent.getStringExtra("uemail");
@@ -62,10 +66,15 @@ public class Login extends Activity {
 
         loginbtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                if(isFieldEmpty(email))
+                progressBar.setDialogMessage("logging in");
+                if(isFieldEmpty(email)){
+                    progressBar.dismissDialog();
                     registerToast("you have to put email");
-                else if(isFieldEmpty(password))
+                }
+                else if(isFieldEmpty(password)){
+                    progressBar.dismissDialog();
                     registerToast("you have to put password");
+                }
                 else {
                     userEmail = email.getText().toString();
                     userPassword = password.getText().toString();
@@ -75,11 +84,13 @@ public class Login extends Activity {
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.putExtra("currentUser",email.getText().toString());
                             startActivity(intent);
+                            progressBar.dismissDialog();
                             finish();
                         }
 
                         @Override
                         public void onFail() {
+                            progressBar.dismissDialog();
                             registerToast("wrong email or password");
                         }
                     });

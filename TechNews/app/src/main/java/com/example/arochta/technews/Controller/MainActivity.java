@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
     NewArticleFragment newArticleFragment;
     EditArticleFragment editArticleFragment;
 
-    //MyProgressBar progressBar;
+    static MyProgressBar progressBar;
     //ProgressDialog progressBar;
 
     private Menu our_menu;
@@ -53,16 +53,7 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
 
         contextOfApplication = getApplicationContext();
 
-        /*progressBar = new ProgressDialog(MainActivity.this);
-        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressBar.setIndeterminate(true);
-        progressBar.setCanceledOnTouchOutside(false);
-        progressBar.setTitle("Loading");
-        progressBar.setMessage("please wait...");
-        progressBar.show();
-        progressBar.dismiss();*/
-
-        //progressBar = new MyProgressBar(getBaseContext());
+        progressBar = new MyProgressBar(MainActivity.this);
 
         Intent intent = getIntent();
 
@@ -109,12 +100,12 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
                 fragmentTransaction.commit();
                 break;
             case R.id.menu_disconnect_btn:
-                //progressBar.setDialogMessage("disconnecting");
+                progressBar.setDialogMessage("disconnecting");
                 setMenuIcons(false,false,false);
                 Model.instace.signOut();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
-                //progressBar.dismissDialog();
+                progressBar.dismissDialog();
                 finish();
                 break;
             case R.id.menu_edit_btn:
@@ -188,6 +179,10 @@ public class MainActivity extends Activity implements ArticlesListFragment.OnFra
         our_menu.getItem(0).setVisible(add);
         our_menu.getItem(1).setVisible(disconnect);
         our_menu.getItem(2).setVisible(edit);
+    }
+
+    public static MyProgressBar getProgressBar(){
+        return progressBar;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.arochta.technews.Controller;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,10 +45,13 @@ public class EditArticleFragment extends Fragment {
     Bitmap imageBitmap;
     ImageView imageView;
     Context applicationContext = MainActivity.getContextOfApplication();
+    MyProgressBar progressBar = MainActivity.getProgressBar();
 
     Button saveBtn;
     Button deleteBtn;
     Button cancelBtn;
+
+    FragmentManager fm;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,6 +72,8 @@ public class EditArticleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d("tag","On Create");
         super.onCreate(savedInstanceState);
+        progressBar.setDialogMessage("loading");
+        fm = getFragmentManager();
         if (getArguments() != null) {
             articleId = getArguments().getInt(ARG_PARAM1);
             article = Model.instace.getArticle(articleId);
@@ -117,6 +123,7 @@ public class EditArticleFragment extends Fragment {
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                progressBar.setDialogMessage("saving");
                 article.setArticleID(articleId);
                 article.setTitle(title.getText().toString());
                 article.setContent(content.getText().toString());
@@ -126,13 +133,14 @@ public class EditArticleFragment extends Fragment {
                 public void complete(String url) {
                     article.setImg(url);
                     Model.instace.editArticle(article);
-                    //DialogFragment df = new ArticleSaveDialog();
-                    //df.show(getFragmentManager(),"tag");
+                    progressBar.dismissDialog();
+                    DialogFragment df = new ArticleSaveDialog();
+                    df.show(fm,"tag");
                 }
 
                 @Override
                 public void fail() {
-
+                    progressBar.dismissDialog();
                     article.setImg("");
                 }
                 });
@@ -142,7 +150,9 @@ public class EditArticleFragment extends Fragment {
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                progressBar.setDialogMessage("removing");
                 Model.instace.deleteArticle(article);
+                progressBar.dismissDialog();
                 onButtonPressed(-1);
             }
         });
@@ -161,6 +171,7 @@ public class EditArticleFragment extends Fragment {
 
             }
         });
+        progressBar.dismissDialog();
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;

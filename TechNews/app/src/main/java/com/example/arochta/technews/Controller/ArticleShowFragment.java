@@ -42,6 +42,7 @@ public class ArticleShowFragment extends Fragment {
     Article article;
 
     Context applicationContext = MainActivity.getContextOfApplication();
+    MyProgressBar progressBar = MainActivity.getProgressBar();
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,6 +62,7 @@ public class ArticleShowFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressBar.setDialogMessage("loading");
         if (getArguments() != null) {
             articleID = getArguments().getInt(ARG_PARAM1);
             article = Model.instace.getArticle(articleID);
@@ -100,6 +102,7 @@ public class ArticleShowFragment extends Fragment {
                 Log.d("showImg","fail");
             }
         });
+        progressBar.dismissDialog();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

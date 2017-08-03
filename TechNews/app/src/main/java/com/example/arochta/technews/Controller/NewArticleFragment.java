@@ -2,6 +2,7 @@ package com.example.arochta.technews.Controller;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,7 +55,11 @@ public class NewArticleFragment extends Fragment {
     Button saveBtn;
     Button cancelBtn;
 
+    MyProgressBar progressBar = MainActivity.getProgressBar();
+
     Context applicationContext = MainActivity.getContextOfApplication();
+
+    FragmentManager fm;
 
     private OnFragmentInteractionListener mListener;
 
@@ -73,6 +78,8 @@ public class NewArticleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressBar.setDialogMessage("loading");
+        fm = getFragmentManager();
         Log.d("tag","on create");
         if (getArguments() != null) {
             author = getArguments().getString(ARG_PARAM1);
@@ -96,6 +103,7 @@ public class NewArticleFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setDialogMessage("saving");
                 newArticle.setArticleID(Model.instace.generateID());
                 newArticle.setTitle(title.getText().toString());
                 newArticle.setAuthor(author);
@@ -110,8 +118,9 @@ public class NewArticleFragment extends Fragment {
                         public void complete(String url) {
                             newArticle.setImg(url);
                             Model.instace.addArticle(newArticle);
-                            //DialogFragment df = new ArticleSaveDialog();
-                            //df.show(getFragmentManager(), "tag");
+                            progressBar.dismissDialog();
+                            DialogFragment df = new ArticleSaveDialog();
+                            df.show(fm, "tag");
                         }
 
                         @Override
@@ -138,6 +147,7 @@ public class NewArticleFragment extends Fragment {
                 dispatchTakePictureIntent();
             }
         });
+        progressBar.dismissDialog();
 
         return contentView;
     }

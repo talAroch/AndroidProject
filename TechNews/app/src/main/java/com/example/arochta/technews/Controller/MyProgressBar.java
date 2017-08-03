@@ -15,6 +15,7 @@ public class MyProgressBar{
     ProgressDialog dialog;
     Context context;
 
+
     public MyProgressBar(){}
 
     /*public MyProgressBar(Context context){
